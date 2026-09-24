@@ -347,7 +347,7 @@ public class Book extends HttpServlet{
 			    int selectedCardId= Integer.parseInt(
 		    			request.getParameter("selectedCardId"));
 		    	List<JavaBeans.Card> cardList=
-		    			(List<JavaBeans.Card>)session.getAttribute("CardList");
+		    			(List<JavaBeans.Card>)session.getAttribute("cardList");
 		    	for(JavaBeans.Card card:cardList) {
 		    		if(card.getCardId()==selectedCardId){
 		    			session.setAttribute("orderInf", orderInf);

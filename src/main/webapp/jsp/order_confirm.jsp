@@ -72,20 +72,23 @@
 		<h5 class="section-title fw-bold">お届け先情報</h5>
 		<div class="card p-3 mb-4 bg-light">
 			<c:choose>
-				<c:if test="${!isNewAddress}">
-					<c:if test="${!userInf.isRecipient}">
-						<p class="mb-0 text-muted">
-							〒${orderInf.postalCode}<br> ${orderInf.address}<br>
-							受取人:${orderInf.accountName} 様<br> メールアドレス: ${orderInf.email}
-						</p>
-					</c:if>
-					<c:otherwise>
-						<p class="mb-0 text-muted">
-							〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
-							受取人:${userInf.accountName} 様<br> メールアドレス: ${userInf.email}
-						</p>
-					</c:otherwise>
-				</c:if>
+				<c:when test="${!isNewAddress}">
+					<c:choose>
+						<c:when test="${!userInf.isRecipient}">
+							<p class="mb-0 text-muted">
+								〒${orderInf.postalCode}<br> ${orderInf.address}<br>
+								受取人:${orderInf.accountName} 様<br> メールアドレス:
+								${orderInf.email}
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p class="mb-0 text-muted">
+								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
+								受取人:${userInf.accountName} 様<br> メールアドレス: ${userInf.email}
+							</p>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
 				<c:otherwise>
 					<p class="mb-1 fw-bold">新住所</p>
 					<p class="mb-0 text-muted">
@@ -98,9 +101,9 @@
 		</div>
 		<h5 class="section-title fw-bold">お支払い方法</h5>
 		<div class="card p-3 mb-4 bg-light">
+			<p class="mb-1 fw-bold">${orderInf.selectedPayment}</p>
 			<c:choose>
-				<p class="mb-1 fw-bold">${orderInf.selectedPayment}</p>
-				<c:if test="${(orderInf.selectedPayment).equals("クレジットカード")}">
+				<c:when test="${orderInf.selectedPayment=='クレジットカード'}">
 					<c:forEach var="card" items="${cardList}">
 						<c:if test="${card.cardId == selectedCardId}">
 							<p class="mb-0 text-muted">カード番号: **** **** ****
@@ -108,10 +111,10 @@
 								${card.expiry})</p>
 						</c:if>
 					</c:forEach>
-				</c:if>
+				</c:when>
 				<c:otherwise>
-					
-						<p class="mb-1 fw-bold"></p>
+
+					<p class="mb-1 fw-bold"></p>
 				</c:otherwise>
 			</c:choose>
 		</div>
