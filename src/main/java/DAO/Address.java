@@ -33,8 +33,8 @@ public class Address {
 							address.setPostalCode(rs.getString("postal_code"));
 							address.setAddress(rs.getString("address"));
 							address.setEmail(rs.getString("email"));
-							address.setMain(rs.getBoolean("is_main"));
-							address.setSelf(rs.getBoolean("is_self"));
+							address.setIsMain(rs.getBoolean("is_main"));
+							address.setIsSelf(rs.getBoolean("is_self"));
 							list.add(address);
 	                    }
 					}//catch略
@@ -63,8 +63,8 @@ public class Address {
 			            ps.setString(3,addr.getPostalCode());
 			            ps.setString(4,addr.getAddress());
 			            ps.setString(5,addr.getEmail());
-			            ps.setBoolean(6,addr.isMain());
-			            ps.setBoolean(7,addr.isSelf());
+			            ps.setBoolean(6,addr.getIsMain());
+			            ps.setBoolean(7,addr.getIsSelf());
 			            ps.setInt(8,addr.getId());
 			            ps.executeUpdate();
 					}

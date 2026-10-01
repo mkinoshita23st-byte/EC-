@@ -46,7 +46,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="book" items="${bookList}">
+				<c:forEach var="book" items="${bookCartList}">
 					<c:if test="${book.cartCnt > 0}">
 						<tr>
 							<td>${book.title}</td>

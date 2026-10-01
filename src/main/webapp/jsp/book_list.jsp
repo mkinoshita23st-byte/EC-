@@ -45,7 +45,7 @@
 		</tr>
 	</thead>
 <tbody>
-	<c:forEach var="book" items="${bookList}" varStatus="status">
+	<c:forEach var="book" items="${bookCartList}" varStatus="status">
 		<tr>
 			<td>${book.title}</td>
 			<td>${book.price}</td>

@@ -39,8 +39,8 @@ public class Cart {
 		}
 		return list;
 	}
-	// カート情報の上書き・追加・削除（都度更新)	
-	public void updateCart(int userId, String isbn, int quantity) {
+	// カート情報の上書き・追加・削除（都度更新)
+	public void updateCartData(int userId, String isbn, int quantity) {
 	    try {
 	        Context context = new InitialContext();
 	        DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/abcdpool");
@@ -89,14 +89,14 @@ public class Cart {
 	}
 	
 	// 購入完了後に全削除
-	public void clearCart(String id) {
+	public void clearCartData(int id) {
 	    try {
 	        Context context = new InitialContext();
 	        DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/abcdpool");
 	        try (Connection db = ds.getConnection()) {
 	            PreparedStatement ps = db.prepareStatement(
 	                    "DELETE FROM usr_cart WHERE id = ?;");
-	            ps.setString(1, id);
+	            ps.setInt(1, id);
 	            ps.executeUpdate();
 	        }
 	    } catch (NamingException | SQLException e) {

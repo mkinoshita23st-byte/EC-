@@ -50,16 +50,16 @@ public class Address implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public boolean isMain() {
+	public boolean getIsMain() {
 		return isMain;
 	}
-	public void setMain(boolean isMain) {
+	public void setIsMain(boolean isMain) {
 		this.isMain = isMain;
 	}
-	public boolean isSelf() {
+	public boolean getIsSelf() {
 		return isSelf;
 	}
-	public void setSelf(boolean isSelf) {
+	public void setIsSelf(boolean isSelf) {
 		this.isSelf = isSelf;
 	}
 }

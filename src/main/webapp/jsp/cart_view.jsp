@@ -42,7 +42,7 @@
 				</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="book" items="${bookList}">
+					<c:forEach var="book" items="${bookCartList}">
 						<c:if test="${book.beforeCartCnt>0}">
 							<tr>
 								<td>${book.title}</td>
@@ -78,7 +78,7 @@
 				</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="book" items="${bookList}">
+					<c:forEach var="book" items="${bookCartList}">
 						<c:if test="${ book.cartCnt>0}">
 							<tr>
 								<td>${book.title}</td>
@@ -96,7 +96,7 @@
 				</table>
 			</c:otherwise>
 		</c:choose>
-		<button type="submit" name="action" value="cartToBookList">書籍一覧へ</button>
+		<button type="submit" name="action" value="cartTobookCartList">書籍一覧へ</button>
 		<button type="submit" name="action" value="updateCart">カート更新</button>
 		<button type="submit" name="action" value="toOrder">購入画面へ</button>
 	</c:otherwise>

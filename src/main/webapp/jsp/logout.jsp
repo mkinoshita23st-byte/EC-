@@ -37,7 +37,7 @@
 					ログアウトしますか？
 				</div>
 				<button type="submit" name="action" value="logout">はい</button>
-				<button type="submit" name="action" value="bookList">いいえ</button>
+				<button type="submit" name="action" value="bookCartList">いいえ</button>
 			</c:when>
 			<c:when test="${isLogout==true}">
 				<div>

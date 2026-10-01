@@ -42,7 +42,7 @@ public class Card implements Serializable{
 	public void setHolder(String holder) {
 		this.holder = holder;
 	}
-	public boolean isMain() {
+	public boolean getIsMain() {
 		return isMain;
 	}
 	public void setIsMain(boolean isMain) {

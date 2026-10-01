@@ -84,7 +84,7 @@
 		<hr class="my-4">
 		<div class="link-container d-flex flex-column gap-2">
 			<div>
-				<a href="bookList.jsp" class="text-secondary">ログインせずに閲覧する</a>
+				<a href="boolCartList.jsp" class="text-secondary">ログインせずに閲覧する</a>
 			</div>
 			<div class="d-flex justify-content-between mt-2">
 				<a href="registerInput.jsp" class="link-primary fw-bold">新規ユーザー登録</a>

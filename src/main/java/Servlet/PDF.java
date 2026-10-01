@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpSession;
 
 import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.BarcodeQRCode;
@@ -28,13 +28,11 @@ import com.itextpdf.layout.property.UnitValue;
 //C:\Users\izumi\AppData\Local\Temp
 public class PDF {
 	//請求書作成
-    public String createInvoice(HttpSession session) 
+    public String createInvoice(JavaBeans.Order orderInf)
     		throws ServletException, IOException {
-        // セッション情報取得
-    	JavaBeans.Order orderList = (JavaBeans.Order) session.getAttribute("orderList");
-        String name = orderList.getName();
-        String postalCode = orderList.getPostalCode();
-        String address = orderList.getAddress();
+        String name = orderInf.getName();
+        String postalCode = orderInf.getPostalCode();
+        String address = orderInf.getAddress();
         
         // 注文日取得
         LocalDate today = LocalDate.now();
@@ -147,15 +145,12 @@ public class PDF {
     }
     
  // 送り状作成
-    public String createShippingSlip(HttpSession session) 
+    public String createShippingSlip(List<JavaBeans.Book> bookList, JavaBeans.Recipient recipientInf, JavaBeans.Order orderInf) 
     		throws ServletException, IOException {
-        // セッション情報取得
-    	JavaBeans.Order orderList = (JavaBeans.Order) session.getAttribute("orderList");
-    	JavaBeans.Order recipientList = (JavaBeans.Order) session.getAttribute("recipientList");
-        String userName = orderList.getName();
-        String recipientName = recipientList.getName();
-        String postalCode = recipientList.getPostalCode();
-        String address = recipientList.getAddress();
+        String userName = orderInf.getName();
+        String recipientName = recipientInf.getName();
+        String postalCode = recipientInf.getPostalCode();
+        String address = recipientInf.getAddress();
     	
         //PDFファイル保存先設定
         String tempDir = System.getProperty("java.io.tmpdir");

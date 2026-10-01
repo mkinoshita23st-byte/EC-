@@ -41,8 +41,8 @@ body {
 			送信しますのでご確認ください。<br>
 
 			<div class="link-right">
-				<button type="submit" name="action" value="logout" class="btn btn-outline-secondary btn-sm me-2">ログアウト</button>
-				<button type="submit" name="action" value="toTop" class="btn btn-primary btn-sm">TOPへ</button>
+				<button type="submit" name="action" value="logoutAfterPurchase" class="btn btn-outline-secondary btn-sm me-2">ログアウト</button>
+				<button type="submit" name="action" value="topAfterPurchase" class="btn btn-primary btn-sm">TOPへ</button>
 			</div>
 		</div>
 	</form>

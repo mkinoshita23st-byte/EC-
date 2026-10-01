@@ -53,7 +53,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="book" items="${bookList}">
+				<c:forEach var="book" items="${bookCartList}">
 					<c:if test="${book.cartCnt > 0}">
 						<tr>
 							<td>${book.title}</td>
@@ -72,20 +72,23 @@
 		<h5 class="section-title fw-bold">お届け先情報</h5>
 		<div class="card p-3 mb-4 bg-light">
 			<c:choose>
-				<c:if test="${!isNewAddress}">
-					<c:if test="${!userInf.isRecipient}">
-						<p class="mb-0 text-muted">
-							〒${orderInf.postalCode}<br> ${orderInf.address}<br>
-							受取人:${orderInf.accountName} 様<br> メールアドレス: ${orderInf.email}
-						</p>
-					</c:if>
-					<c:otherwise>
-						<p class="mb-0 text-muted">
-							〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
-							受取人:${userInf.accountName} 様<br> メールアドレス: ${userInf.email}
-						</p>
-					</c:otherwise>
-				</c:if>
+				<c:when test="${!isNewAddress}">
+					<c:choose>
+						<c:when test="${!orderInf.isRecipient}">
+							<p class="mb-0 text-muted">
+								〒${orderInf.postalCode}<br> ${orderInf.address}<br>
+								受取人:${orderInf.name} 様<br> メールアドレス:
+								${orderInf.email}
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p class="mb-0 text-muted">
+								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
+								受取人:${recipientInf.accountName} 様<br> メールアドレス: ${recipientInf.email}
+							</p>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
 				<c:otherwise>
 					<p class="mb-1 fw-bold">新住所</p>
 					<p class="mb-0 text-muted">
@@ -98,25 +101,15 @@
 		</div>
 		<h5 class="section-title fw-bold">お支払い方法</h5>
 		<div class="card p-3 mb-4 bg-light">
-			<c:choose>
-				<p class="mb-1 fw-bold">${orderInf.selectedPayment}</p>
-				<c:if test="${(orderInf.selectedPayment).equals("クレジットカード")}">
-					<c:forEach var="card" items="${cardList}">
-						<c:if test="${card.cardId == selectedCardId}">
-							<p class="mb-0 text-muted">カード番号: **** **** ****
-								${card.number.substring(card.number.length() - 4)} (有効期限:
-								${card.expiry})</p>
-						</c:if>
-					</c:forEach>
-				</c:if>
-				<c:otherwise>
-					
-						<p class="mb-1 fw-bold"></p>
-				</c:otherwise>
-			</c:choose>
+			<p class="mb-1 fw-bold">${orderInf.selectedPayment}</p>
+			<c:if test="${orderInf.selectedPayment=='クレジットカード'}">
+				<p class="mb-0 text-muted">カード番号: **** **** ****
+					${orderCardInf.number.substring(orderCardInf.number.length() - 4)}
+					(有効期限: ${orderCardInf.expiry} ${orderCardInf.holder})</p>
+			</c:if>
 		</div>
 
-		<!-- 4. サーバー受渡用のhiddenパラメータ (戻る・確定用) -->
+		<!--サーバー受渡用のhiddenパラメータ (戻る・確定用) -->
 		<input type="hidden" name="addressType" value="${addressType}">
 		<input type="hidden" name="selectedAddressId"
 			value="${selectedAddressId}"> <input type="hidden"
@@ -129,7 +122,7 @@
 
 		<!-- 5. 操作ボタン -->
 		<div class="d-flex justify-content-between mt-4">
-			<button type="submit" name="action" value="orderInputBack"
+			<button type="submit" name="action" value="modifyOrder"
 				class="btn btn-secondary btn-lg">修正する</button>
 			<button type="submit" name="action" value="orderComplete"
 				class="btn btn-danger btn-lg px-5 fw-bold">注文を確定する</button>

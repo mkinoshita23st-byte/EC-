@@ -42,16 +42,16 @@ public class Order implements Serializable{
 	public void setSelectedPayment(String selectedPayment) {
 		this.selectedPayment = selectedPayment;
 	}
-	public boolean isLogin() {
+	public boolean getIsLogin() {
 		return isLogin;
 	}
-	public void setLogin(boolean isLogin) {
+	public void setIsLogin(boolean isLogin) {
 		this.isLogin = isLogin;
 	}
-	public boolean isRecipient() {
+	public boolean getIsRecipient() {
 		return isRecipient;
 	}
-	public void setRecipient(boolean isRecipient) {
+	public void setIsRecipient(boolean isRecipient) {
 		this.isRecipient = isRecipient;
 	}
 }

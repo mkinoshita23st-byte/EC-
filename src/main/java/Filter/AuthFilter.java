@@ -1,3 +1,4 @@
+package Filter;
 
 import java.io.IOException;
 
@@ -10,6 +11,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import JavaBeans.Order;
 
 public class AuthFilter implements Filter {
 	private String path=null;
@@ -33,7 +36,7 @@ public class AuthFilter implements Filter {
         if ("orderInput".equals(action)) {
             HttpSession session = req.getSession();
             JavaBeans.Order orderList = (JavaBeans.Order) session.getAttribute("orderList");            
-            if (!orderList.isLogin()) {
+            if (!orderList.getIsLogin()) {
                 // 未ログインの場合,ログイン画面へリダイレクト
                 session.setAttribute("loginMessage", "購入画面に進むにはログインしてください");
                 res.sendRedirect(req.getContextPath() + "/BookServlet?action=login");
