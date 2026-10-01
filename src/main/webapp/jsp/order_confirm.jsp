@@ -74,6 +74,7 @@
 			<c:choose>
 				<c:when test="${!isNewAddress}">
 					<c:choose>
+<<<<<<< HEAD
 						<c:when test="${!orderInf.isRecipient}">
 							<p class="mb-0 text-muted">
 								〒${orderInf.postalCode}<br> ${orderInf.address}<br>
@@ -85,6 +86,19 @@
 							<p class="mb-0 text-muted">
 								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
 								受取人:${recipientInf.accountName} 様<br> メールアドレス: ${recipientInf.email}
+=======
+						<c:when test="${!userInf.isRecipient}">
+							<p class="mb-0 text-muted">
+								〒${orderInf.postalCode}<br> ${orderInf.address}<br>
+								受取人:${orderInf.accountName} 様<br> メールアドレス:
+								${orderInf.email}
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p class="mb-0 text-muted">
+								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
+								受取人:${userInf.accountName} 様<br> メールアドレス: ${userInf.email}
+>>>>>>> branch 'master' of https://github.com/mkinoshita23st-byte/EC-.git
 							</p>
 						</c:otherwise>
 					</c:choose>
@@ -102,11 +116,29 @@
 		<h5 class="section-title fw-bold">お支払い方法</h5>
 		<div class="card p-3 mb-4 bg-light">
 			<p class="mb-1 fw-bold">${orderInf.selectedPayment}</p>
+<<<<<<< HEAD
 			<c:if test="${orderInf.selectedPayment=='クレジットカード'}">
 				<p class="mb-0 text-muted">カード番号: **** **** ****
 					${orderCardInf.number.substring(orderCardInf.number.length() - 4)}
 					(有効期限: ${orderCardInf.expiry} ${orderCardInf.holder})</p>
 			</c:if>
+=======
+			<c:choose>
+				<c:when test="${orderInf.selectedPayment=='クレジットカード'}">
+					<c:forEach var="card" items="${cardList}">
+						<c:if test="${card.cardId == selectedCardId}">
+							<p class="mb-0 text-muted">カード番号: **** **** ****
+								${card.number.substring(card.number.length() - 4)} (有効期限:
+								${card.expiry})</p>
+						</c:if>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+
+					<p class="mb-1 fw-bold"></p>
+				</c:otherwise>
+			</c:choose>
+>>>>>>> branch 'master' of https://github.com/mkinoshita23st-byte/EC-.git
 		</div>
 
 		<!--サーバー受渡用のhiddenパラメータ (戻る・確定用) -->

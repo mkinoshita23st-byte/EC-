@@ -349,6 +349,25 @@ public class Book extends HttpServlet {
 						session.setAttribute("recipientInf", recipientInf);
 					}
 				}
+<<<<<<< HEAD
+=======
+			    //支払方法決定
+			    String paymentType= request.getParameter("paymentType");
+			    paymentType=paymentType.equals("credit")?"クレジットカード":
+			    	paymentType.equals("cod")?"代金引換（代引き）":"コンビニ決済";
+			    orderInf.setSelectedPayment(paymentType);			   
+			    int selectedCardId= Integer.parseInt(
+		    			request.getParameter("selectedCardId"));
+		    	List<JavaBeans.Card> cardList=
+		    			(List<JavaBeans.Card>)session.getAttribute("cardList");
+		    	for(JavaBeans.Card card:cardList) {
+		    		if(card.getCardId()==selectedCardId){
+		    			session.setAttribute("orderInf", orderInf);
+		    		}
+			    }
+			    
+			    session.setAttribute("orderInf", orderInf);
+>>>>>>> branch 'master' of https://github.com/mkinoshita23st-byte/EC-.git
 			}
 			//支払方法決定
 			String paymentType = request.getParameter("paymentType");
