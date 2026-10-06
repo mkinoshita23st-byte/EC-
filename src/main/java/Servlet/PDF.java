@@ -136,6 +136,7 @@ public class PDF {
         .add(new Paragraph("[商品明細]")
                 .setFontSize(12)
                 .setBold()
+                .setMarginLeft(35f)
                 .setMarginBottom(5f))
         .add(detailTable)
         .add(barcode);
@@ -236,8 +237,9 @@ public class PDF {
                 .setFontSize(11)
                 .setMarginTop(10f))
         .add(new Paragraph("[商品明細]")
-                .setFontSize(13)
+                .setFontSize(12)
                 .setBold()
+                .setMarginLeft(70f)
                 .setMarginTop(15f)
                 .setMarginBottom(5f))
         .add(detailTable)

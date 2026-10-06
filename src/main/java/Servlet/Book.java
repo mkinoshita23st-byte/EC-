@@ -406,9 +406,7 @@ public class Book extends HttpServlet {
 		}
 		case "orderComplete" -> {
 			forwardPath = "order_complete";
-			request.setCharacterEncoding("UTF-8");
-			StringBuilder selectBooks = new StringBuilder();//メールテキスト用意
-			//在庫データベース更新・メールテキスト作成
+			//書籍在庫データベース更新
 			List<JavaBeans.Book> bookCartList = (List<JavaBeans.Book>) session.getAttribute("bookCartList");
 			DAO.Book bookDao = new DAO.Book();
 			for (JavaBeans.Book book : bookCartList) {
@@ -416,15 +414,13 @@ public class Book extends HttpServlet {
 				int cartCnt = book.getCartCnt();
 				if (cartCnt > 0) {
 					bookDao.updateStock(isbn, cartCnt);
-					selectBooks.append(book.getTitle()).append("　　")
-							.append(book.getPrice()).append("　　")
-							.append(book.getCartCnt()).append("冊\n");//メールテキスト更新
 				}
 			}
 			//メール送信
 			Servlet.Mail sender = new Servlet.Mail(host, port, user, password, charset);
 			JavaBeans.Order orderInf = (JavaBeans.Order) session.getAttribute("orderInf");
-			sender.sendMailForBuyer(bookCartList, orderInf);
+			int totalPrice = (Integer) session.getAttribute("totalPrice");
+			sender.sendMailForBuyer(bookCartList, orderInf,totalPrice);
 			if (orderInf.getIsRecipient() == true) {
 				JavaBeans.Recipient recipientInf = (JavaBeans.Recipient) session.getAttribute("recipientInf");
 				sender.sendMailForRecipient(bookCartList, orderInf, recipientInf);

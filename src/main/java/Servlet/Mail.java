@@ -33,7 +33,7 @@ public class Mail {
 		this.charset = charset;
 	}
 
-	public void sendMailForBuyer(List<JavaBeans.Book> bookList, JavaBeans.Order orderInf) {
+	public void sendMailForBuyer(List<JavaBeans.Book> bookList, JavaBeans.Order orderInf, int totalPrice) {
 		Properties props = new Properties();
 		props.setProperty("mail.smtp.host", this.host);
 		props.setProperty("mail.smtp.port", this.port);
@@ -55,8 +55,7 @@ public class Mail {
 			    int cartCnt = book.getCartCnt();
 			    //購入分だけ対象
 			    if (cartCnt > 0) {
-			        // 書籍名を全角・半角含めて指定桁数（例: 25文字）で左揃えにし、価格・冊数の位置を揃える
-			        String line = String.format("%-25s %6d円 %3d冊\n", 
+			        String line = String.format("%-30s %6d円 %3d冊\n", 
 			                book.getTitle(), 
 			                book.getPrice(), 
 			                book.getCartCnt());
@@ -82,12 +81,12 @@ public class Mail {
 			//テキストセット
 			MimeBodyPart textPart = new MimeBodyPart();
 			String mailText = "注文完了のお知らせ\n"
-					+ "購入者様\n\n"
+					+ orderInf.getName()+"様\n\n"
 					+ "この度は、福岡書店をご利用いただき誠にありがとうございます。\n\n"
 					+ "<注文内容>\n"
 					+ selectBooks
 					+ "-------------------------------------------------------------\n"
-					+ "                              合計金額 円\n\n"
+					+ "                                              合計金額 "+totalPrice+"円\n\n"
 					+ "発送予定日は " + shippingDateStr + " です。\n"
 					+ "添付ファイルにて請求書を送付しておりますのでご確認ください。\n";
 			textPart.setText(mailText, charset);
@@ -134,13 +133,15 @@ public class Mail {
 			String recipientName = recipientInf.getName();
 			StringBuilder selectBooks = new StringBuilder();//メールテキスト用意
 			for (JavaBeans.Book book : bookList) {
-				int cartCnt = book.getCartCnt();
-				//購入分だけ対象
-				if (cartCnt > 0) {
-					selectBooks.append(book.getTitle()).append("　　")
-							.append(book.getPrice()).append("　　")
-							.append(book.getCartCnt()).append("冊\n");//メールテキスト更新
-				}
+			    int cartCnt = book.getCartCnt();
+			    //購入分だけ対象
+			    if (cartCnt > 0) {
+			        String line = String.format("%-30s %6d円 %3d冊\n", 
+			                book.getTitle(), 
+			                book.getPrice(), 
+			                book.getCartCnt());
+			        selectBooks.append(line);
+			    }
 			}
 			//注文日の取得
 			LocalDate today = LocalDate.now();
@@ -161,12 +162,11 @@ public class Mail {
 			//テキストセット
 			MimeBodyPart text = new MimeBodyPart();
 			String mailText = "注文完了のお知らせ\n"
-					+ "受取人様\n\n"
+					+ recipientInf.getName()+"\n\n"
 					+ "この度は、福岡書店をご利用いただき誠にありがとうございます。\n\n"
 					+ "<注文内容>\n"
 					+ selectBooks
 					+ "-------------------------------------------------------------\n"
-					+ "                              合計金額円\n\n"
 					+ "発送予定日は " + shippingDateStr + " です。\n"
 					+ "添付ファイルにて請求書を送付しておりますのでご確認ください。\n";
 			text.setText(mailText, charset);
