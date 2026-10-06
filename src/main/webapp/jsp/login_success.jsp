@@ -27,6 +27,7 @@
 					${account_name}
 					さん</h5>
 			</div>
+		<a href="BookServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
 		<a href="BookServlet?action=cart_view" class="btn btn-secondary">カートページへ</a>
 	</form>
 </body>

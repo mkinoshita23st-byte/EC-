@@ -42,6 +42,7 @@ public class Book extends HttpServlet {
 		if (action == null) {
 			forwardPath = "jsp/top.jsp";
 			JavaBeans.Order orderInf = new JavaBeans.Order();
+			orderInf.setIsLogin(false);
 			DAO.Book bookDao = new DAO.Book();
 			List<JavaBeans.Book> bookCartList = bookDao.getBookData();
 			for (JavaBeans.Book book : bookCartList) {
@@ -349,8 +350,6 @@ public class Book extends HttpServlet {
 						session.setAttribute("recipientInf", recipientInf);
 					}
 				}
-<<<<<<< HEAD
-=======
 			    //支払方法決定
 			    String paymentType= request.getParameter("paymentType");
 			    paymentType=paymentType.equals("credit")?"クレジットカード":
@@ -367,7 +366,6 @@ public class Book extends HttpServlet {
 			    }
 			    
 			    session.setAttribute("orderInf", orderInf);
->>>>>>> branch 'master' of https://github.com/mkinoshita23st-byte/EC-.git
 			}
 			//支払方法決定
 			String paymentType = request.getParameter("paymentType");

@@ -18,9 +18,11 @@
 	vertical-align: middle;
 }
 
-/* 偶数行: 色付き（下から1行目以内のtrは除く） */
 .table-custom tbody tr:nth-child(even):not(:last-child) td {
-	background-color: rgb(192, 192, 192) !important;
+	background-color: rgb(221, 221, 221) !important;
+}
+.table-custom tbody tr:nth-child(odd):not(:last-child) td {
+	background-color: rgb(243, 243, 243) !important;
 }
 
 .section-title {

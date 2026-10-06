@@ -52,13 +52,16 @@ public class Mail {
 			String userName = orderInf.getName();
 			StringBuilder selectBooks = new StringBuilder();//メールテキスト用意
 			for (JavaBeans.Book book : bookList) {
-				int cartCnt = book.getCartCnt();
-				//購入分だけ対象
-				if (cartCnt > 0) {
-					selectBooks.append(book.getTitle()).append("　　")
-							.append(book.getPrice()).append("　　")
-							.append(book.getCartCnt()).append("冊\n");//メールテキスト更新
-				}
+			    int cartCnt = book.getCartCnt();
+			    //購入分だけ対象
+			    if (cartCnt > 0) {
+			        // 書籍名を全角・半角含めて指定桁数（例: 25文字）で左揃えにし、価格・冊数の位置を揃える
+			        String line = String.format("%-25s %6d円 %3d冊\n", 
+			                book.getTitle(), 
+			                book.getPrice(), 
+			                book.getCartCnt());
+			        selectBooks.append(line);
+			    }
 			}
 			//注文日の取得
 			LocalDate today = LocalDate.now();
