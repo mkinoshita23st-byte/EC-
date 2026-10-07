@@ -11,65 +11,68 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <style>
-	.table-custom tbody tr:nth-child(odd) td {
-		background-color: rgb(221, 221, 221) !important;
-	}
-		.table-custom tbody tr:nth-child(even) td {
-		background-color: rgb(243, 243, 243) !important;
-	}
+.table-custom tbody tr:nth-child(odd) td {
+	background-color: rgb(221, 221, 221) !important;
+}
+
+.table-custom tbody tr:nth-child(even) td {
+	background-color: rgb(243, 243, 243) !important;
+}
 </style>
 </head>
 <body>
-	<form method="POST" action="BookServlet">
+	<form method="POST" action="CartServlet">
 		<table class="table table-custom">
 			<c:choose>
 				<c:when test="${totalQuantity==0}">
 		現在、カートの中には商品はありません。<br>
-					<a href="BookServlet?action=top" class="btn btn-secondary">TOPへ</a>
-					<a href="BookServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
+					<a href="MainServlet?action=top" class="btn btn-secondary">TOPへ</a>
+					<a href="MainServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
 				</c:when>
 				<c:otherwise>
-						<table class="table align-middle table-custom">
-							<thead>
-								<tr>
-									<th>書籍名</th>
-									<th>価格</th>
-									<th>出版社</th>
-									<th>刊行年月日</th>
-									<c:if test="${updateCart == true}">
-										<th class="text-center">前の購入数</th>
-									</c:if>
-									<th>購入数</th>
-								</tr>
-							</thead>
-							<tbody >
+					<table class="table align-middle table-custom">
+						<thead>
+							<tr>
+								<th>書籍名</th>
+								<th>価格</th>
+								<th>出版社</th>
+								<th>刊行年月日</th>
+								<c:if test="${updateCart == true}">
+									<th class="text-center">前の購入数</th>
+								</c:if>
+								<th>購入数</th>
+							</tr>
+						</thead>
+						<tbody>
 							<c:forEach var="book" items="${bookCartList}">
-									<c:if test="${book.cartCnt > 0 || (updateCart == true && book.beforeCartCnt > 0)}">
-										<tr>
-											<td>${book.title}</td>
-											<td>${book.price}</td>
-											<td>${book.publish}</td>
-											<td>${book.published}</td>
-											<c:if test="${updateCart == true}">
-											
-												<td style="text-decoration: line-through;" class="text-muted text-center">
-													<c:if test="${book.beforeCartCnt > book.cartCnt && book.beforeCartCnt > 0}">
-                										(${book.beforeCartCnt})
-              										</c:if>
-												</td>
-											</c:if>
-											<td><input type="number" name="${book.isbn}"
-												value="${book.cartCnt}" min="0" max="${book.cartCnt}"
-												class="count-input <c:if test='${updateCart == true && book.beforeCartCnt != book.cartCnt}'>text-danger fw-bold </c:if>"
-												required></td>
-										</tr>
-									</c:if>
-								</c:forEach>
-							</tbody>
-						</table>
-					<button type="submit" name="action" value="cartTobookCartList">書籍一覧へ</button>
-					<button type="submit" name="action" value="updateCart">カート更新</button>
-					<button type="submit" name="action" value="toOrder">購入画面へ</button>
+								<c:if
+									test="${book.cartCnt > 0 || (updateCart == true && book.beforeCartCnt > 0)}">
+									<tr>
+										<td>${book.title}</td>
+										<td>${book.price}</td>
+										<td>${book.publish}</td>
+										<td>${book.published}</td>
+										<c:if test="${updateCart == true}">
+											<td style="text-decoration: line-through;"
+												class="text-muted text-center">
+												(${book.beforeCartCnt})
+											</td>
+										</c:if>
+										<td><input type="number" name="${book.isbn}"
+											value="${book.cartCnt}" min="0" max="${book.cartCnt}"
+											class="count-input <c:if test='${updateCart == true && book.beforeCartCnt != book.cartCnt}'>text-danger fw-bold </c:if>"
+											required></td>
+									</tr>
+								</c:if>
+							</c:forEach>
+						</tbody>
+					</table>
+					<button type="submit" name="action" value="cartTobookCartList"
+						class="btn btn-secondary">書籍一覧へ</button>
+					<button type="submit" name="action" value="updateCart"
+						class="btn btn-secondary">カート更新</button>
+					<button type="submit" formaction="OrderServlet" name="action"
+						value="toOrder" class="btn btn-secondary">購入画面へ</button>
 				</c:otherwise>
 			</c:choose>
 		</table>

@@ -8,7 +8,6 @@
 <meta charset="UTF-8">
 <title>ログイン</title>
 <style>
-/* 画面全体を中央寄せにする設定 */
 body {
 	display: flex;
 	flex-direction: column;
@@ -17,8 +16,6 @@ body {
 	min-height: 100vh;
 	margin: 0;
 }
-
-/* ログイン全体の枠 */
 .login-box {
 	width: 100%;
 	max-width: 450px;
@@ -27,13 +24,10 @@ body {
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
-/* ★入力欄フォーカス時の水色の枠線を外す */
 .form-control:focus {
 	border-color: #ced4da;
 	box-shadow: none !important;
 }
-
-/* アプリ名 */
 .title {
 	font-size: 48px;
 	font-weight: bold;
@@ -57,19 +51,16 @@ body {
 	text-decoration: underline;
 }
 </style>
-
-<!-- Bootstrap CSS -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-<!-- Bootstrap Icons（目のアイコン） -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 	<div class="login-box">
 		<div class="title">福岡書店</div>
-		<form method="POST" action="BookServlet">
+		<form method="POST" action="LoginServlet">
 			<div class="mb-3">
 				<label for="uid" class="form-label font-weight-bold">ログインID</label>
 				<input type="text" id="uid" name="input_id"
@@ -95,11 +86,10 @@ body {
 			<hr class="my-4">
 			<div class="link-container d-flex flex-column gap-2">
 				<div>
-					<a href="book_list.jsp" class="text-secondary">ログインせずに閲覧する</a>
+					<a href="MainServlet?action=book_list" class="text-secondary">ログインせずに閲覧する</a>
 				</div>
 				<div class="d-flex justify-content-between mt-2">
-					<a href="BookServlet?action=register_input"
-						class="btn btn-secondary btn-lg">新規ユーザー登録</a>
+					<a href="MainServlet?action=register_input">新規ユーザー登録</a>
 					<!--				<a href="forgotPassword.jsp" class="text-muted">パスワードをお忘れの方</a>-->
 				</div>
 			</div>

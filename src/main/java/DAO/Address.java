@@ -77,7 +77,7 @@ public class Address {
 	//新住所追加
 	public void addAddress(JavaBeans.Address newAddressInf,JavaBeans.User userInf) {
 		int id=userInf.getId();
-//		int addressIdは自動割り振り
+		//int addressIdは自動割り振り
 		String name=newAddressInf.getName();
 		String postalCode=newAddressInf.getPostalCode();
 		String address=newAddressInf.getAddress();

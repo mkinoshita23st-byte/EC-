@@ -84,9 +84,10 @@ public class PDF {
         Table sellerTable = new Table(UnitValue.createPercentArray(new float[]{35f, 65f}));
         sellerTable.setWidth(UnitValue.createPercentValue(100));
         Cell qrCell = new Cell().add(qrcode).setBorder(Border.NO_BORDER);
-        Cell shopInfoCell = new Cell().add(new Paragraph("福岡書店\n福岡市東区千早4丁目24番1号１１１１１１１１１１１１１１１１１")
+        Cell shopInfoCell = new Cell().add(new Paragraph("福岡書店\n福岡市東区千早4丁目24番1号")
                 .setFontSize(10)
                 .setMultipliedLeading(1.2f))//行間
+        		.setVerticalAlignment(com.itextpdf.layout.property.VerticalAlignment.MIDDLE)//中央揃え
                 .setBorder(Border.NO_BORDER);
         sellerTable.addCell(qrCell);
         sellerTable.addCell(shopInfoCell);
@@ -198,6 +199,7 @@ public class PDF {
         Cell shopInfoCell = new Cell().add(new Paragraph("福岡書店\n福岡市東区千早4丁目24番1号")
                 .setFontSize(10)
                 .setMultipliedLeading(1.2f))
+        		.setVerticalAlignment(com.itextpdf.layout.property.VerticalAlignment.MIDDLE)//中央揃え
                 .setBorder(Border.NO_BORDER);
         sellerTable.addCell(qrCell);
         sellerTable.addCell(shopInfoCell);

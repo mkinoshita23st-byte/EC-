@@ -39,7 +39,7 @@
 		★まだご注文は完了していません★<br> 内容をご確認の上、「注文を確定する」ボタンを押してください。
 	</div>
 
-	<form method="POST" action="BookServlet">
+	<form method="POST" action="OrderServlet">
 		<!-- 1. 購入商品情報 -->
 		<h5 class="section-title fw-bold">購入商品情報</h5>
 		<table class="table table-custom mb-4">
@@ -85,6 +85,7 @@
 								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
 								受取人:${recipientInf.name} 様<br> メールアドレス:
 								${recipientInf.email}
+								</p>
 						</c:otherwise>
 					</c:choose>
 				</c:when>
@@ -92,7 +93,7 @@
 					<p class="mb-1 fw-bold">新住所</p>
 					<p class="mb-0 text-muted">
 						〒${newAddressInf.postalCode}<br> ${newAddressInf.address}<br>
-						受取人:${newAddressInf.accountName} 様<br> メールアドレス:
+						受取人:${newAddressInf.name} 様<br> メールアドレス:
 						${newAddressInf.email}
 					</p>
 				</c:otherwise>
@@ -110,19 +111,19 @@
 				<c:when test="${orderInf.selectedPayment=='クレジットカード'}">
 					<c:forEach var="card" items="${cardList}">
 						<c:if test="${card.cardId == selectedCardId}">
-							<p class="mb-0 text-muted">カード番号: **** **** ****
+							<p class="mb-0 text-muted">
+								カード番号: **** **** ****
 								${card.number.substring(card.number.length() - 4)} (有効期限:
-								${card.expiry})</p>
+								${card.expiry})
+							</p>
 						</c:if>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
-
 					<p class="mb-1 fw-bold"></p>
 				</c:otherwise>
 			</c:choose>
 		</div>
-
 		<input type="hidden" name="addressType" value="${addressType}">
 		<input type="hidden" name="selectedAddressId"
 			value="${selectedAddressId}"> <input type="hidden"
@@ -132,10 +133,8 @@
 		<input type="hidden" name="newEmail" value="${newEmail}"> <input
 			type="hidden" name="paymentType" value="${paymentType}"> <input
 			type="hidden" name="selectedCardId" value="${selectedCardId}">
-
-		<!-- 5. 操作ボタン -->
 		<div class="d-flex justify-content-between mt-4">
-			<button type="submit" name="action" value="modifyOrder"
+			<button type="submit" name="action" value="reOrder"
 				class="btn btn-secondary btn-lg">修正する</button>
 			<button type="submit" name="action" value="orderComplete"
 				class="btn btn-danger btn-lg px-5 fw-bold">注文を確定する</button>

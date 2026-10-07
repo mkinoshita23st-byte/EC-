@@ -18,13 +18,13 @@
 </style>
 </head>
 <body>
-	<form method="GET" action="BookServlet">
+	<form method="GET" action="MainServlet">
 		<div class="text-center fs-4 fw-bold text-danger mb-3">
 			ログインに失敗しました<br>
 		</div>
 		<div class="d-flex justify-content-center gap-3">
-			<a href="BookServlet?action=top" class="btn btn-secondary">TOPへ</a>
-			<a href="BookServlet?action=login" class="btn btn-secondary">もう一度</a>
+			<button type="submit" name="action" value="top" class="btn btn-secondary">TOPへ</button>
+			<button type="submit" name="action" value="login" class="btn btn-secondary">もう一度</button>
 		</div>
 
 	</form>

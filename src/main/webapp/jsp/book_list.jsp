@@ -29,13 +29,14 @@ body {
 </style>
 </head>
 <body>
-	<form method="POST" action="BookServlet">
+	<form method="POST" action="CartServlet">
 		<c:choose>
 			<c:when test="${orderInf.isLogin}">
-				<a href="BookServlet?action=mypage_view">ログイン中：${orderInf.name}</a>
+				<a href="MainServlet?action=mypage_view">ログイン中：${orderInf.name}</a><br>
+				<a href="MainServlet?action=logout">ログアウト</a>
 			</c:when>
 			<c:otherwise>
-				<a href="BookServlet?action=login">未ログイン：あなた</a>
+				<a href="MainServlet?action=login">未ログイン：あなた</a>
 			</c:otherwise>
 		</c:choose>
 		<table class="table table-custom">
@@ -75,10 +76,9 @@ body {
 				</c:forEach>
 			</tbody>
 		</table>
-		<!--GETとPOSTで分けている-->
 		<div class="d-flex gap-2 mt-3">
-			<a href="BookServlet?action=top" class="btn btn-secondary">TOPへ</a> <a
-				href="BookServlet?action=cart_view" class="btn btn-secondary">カートを確認</a>
+			<a href="MainServlet?action=top" class="btn btn-secondary">TOPへ</a> 
+			<a href="MainServlet?action=cart_view" class="btn btn-secondary">カートを確認</a>
 			<button type="submit" name="action" value="inCart"
 				class="btn btn-secondary">カートに入れる</button>
 		</div>

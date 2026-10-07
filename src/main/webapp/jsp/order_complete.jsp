@@ -34,33 +34,18 @@ body {
 	rel="stylesheet">
 </head>
 <body>
-	<form method="POST" action="BookServlet">
+	<form method="POST" action="OrderServlet">
 		<div class="message-container">
-			ご購入ありがとうございます！<br>
-			※後ほど、ご注文内容を記載したメールを<br>
-			送信しますのでご確認ください。<br>
+			ご購入ありがとうございます！<br> ※後ほど、ご注文内容を記載したメールを<br> 送信しますのでご確認ください。<br>
 
 			<div class="link-right">
-				<button type="submit" name="action" value="logoutAfterPurchase" class="btn btn-outline-secondary btn-sm me-2">ログアウト</button>
-				<button type="submit" name="action" value="topAfterPurchase" class="btn btn-primary btn-sm">TOPへ</button>
+				<button type="submit" formaction="LoginServlet" name="action"
+					value="logoutAfterPurchase"
+					class="btn btn-outline-secondary btn-sm me-2">ログアウト</button>
+				<button type="submit" name="action" value="topAfterPurchase"
+					class="btn btn-primary btn-sm">TOPへ</button>
 			</div>
 		</div>
 	</form>
-	<!-- 新住所登録用フォーム -->
-	<form id="saveAddressForm" method="POST" action="BookServlet">
-		<input type="hidden" name="action" value="registerNewAddress">
-	</form>
-
-	<c:if test="${not empty sessionScope.newAddressMessage}">
-		<script>
-			window.addEventListener('DOMContentLoaded', () => {
-				const isConfirm = confirm("${sessionScope.newAddressMessage}");
-				if (isConfirm) {
-					document.getElementById('saveAddressForm').submit();
-				}
-			});
-		</script>
-	</c:if>
-	<c:remove var="newAddressMessage" scope="session" />
 </body>
 </html>

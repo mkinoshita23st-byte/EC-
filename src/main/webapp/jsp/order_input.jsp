@@ -21,6 +21,7 @@
 .table-custom tbody tr:nth-child(even):not(:last-child) td {
 	background-color: rgb(221, 221, 221) !important;
 }
+
 .table-custom tbody tr:nth-child(odd):not(:last-child) td {
 	background-color: rgb(243, 243, 243) !important;
 }
@@ -35,7 +36,7 @@
 </head>
 <body class="container py-4">
 	<h2 class="mb-4">ご注文内容の入力</h2>
-	<form method="POST" action="BookServlet">
+	<form method="POST" action="OrderServlet">
 		<h5 class="section-title fw-bold">購入商品情報</h5>
 		<table class="table table-custom">
 			<thead>
@@ -67,123 +68,146 @@
 
 		<h5 class="section-title fw-bold">お届け先の選択</h5>
 		<div class="card p-3 mb-4 bg-light">
-			<div class="form-check mb-2">
-				<input class="form-check-input" type="radio" name="addressType"
-					id="myAddress" value="self"
-					<c:if test="${empty addressType || addressType == 'self'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="myAddress">
-					ご自宅（会員登録住所へ送る） </label>
-				<div class="text-muted small ms-3" id="selfAddressArea">
-					〒${userInf.postalCode} ${userInf.address}（${userInf.accountName} 様）<br>
-					メールアドレス: ${userInf.email}
-				</div>
-			</div>
-			<div class="form-check mb-2">
-				<input class="form-check-input" type="radio" name="addressType"
-					id="addrRegistered" value="registered"
-					<c:if test="${addressType == 'registered'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="addrRegistered">
-					登録済みのお届け先から選択 </label>
-			</div>
-			<div class="ms-4 mb-3 d-none" id="registeredAddressArea">
-				<c:choose>
-					<c:when test="${not empty addressList}">
-						<select name="selectedAddressId" id="addressSelect" class="form-select">
-							<c:forEach var="addr" items="${addressList}">
-								<option value="${addr.addressId}"
-									<c:if test="${addr.addressId == selectedAddressId}">selected</c:if>>
-									〒${addr.postalCode} ${addr.address} (${addr.name} 様) [${addr.email}]
-								</option>
-							</c:forEach>
-						</select>
-					</c:when>
-					<c:otherwise>
-						<p class="text-danger small mb-0">登録されている別のお届け先がありません。</p>
-					</c:otherwise>
-				</c:choose>
-			</div>
-			<div class="form-check mb-2">
-				<input class="form-check-input" type="radio" name="addressType"
-					id="addrNew" value="new"
-					<c:if test="${addressType == 'new'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="addrNew">
-					新しいお届け先を指定する </label>
-			</div>
-			<div class="ms-4 mb-2 d-none card p-3 bg-white" id="newAddressArea">
-				<div class="row g-3">
-					<div class="col-md-6">
-						<label class="form-label small fw-bold">受取人氏名</label>
-						<input type="text" name="newRecipientName" class="form-control"
-							placeholder="例：山田 太郎" value="${newRecipientName}">
-					</div>
-					<div class="col-md-6">
-						<label class="form-label small fw-bold">郵便番号</label>
-						<input type="text" name="newPostalCode" class="form-control"
-							placeholder="例：000-0000" value="${newPostalCode}">
-					</div>
-					<div class="col-12">
-						<label class="form-label small fw-bold">住所</label>
-						<input type="text" name="newAddress" class="form-control"
-							placeholder="例：東京都千代田区..." value="${newAddress}">
-					</div>
-					<div class="col-12">
-						<label class="form-label small fw-bold">メールアドレス</label>
-						<input type="text" name="newEmail" class="form-control"
-							placeholder="例：example@domain.com" value="${newEmail}">
+			<!-- お届け先選択パート -->
+			<div class="card p-3 mb-4 bg-light">
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="addressType"
+						id="myAddress" value="self"
+						<c:if test="${empty addressType || addressType == 'self'}">checked</c:if>>
+					<label class="form-check-label fw-bold" for="myAddress">
+						ご自宅（会員登録住所へ送る） </label>
+					<div class="text-muted small ms-3" id="selfAddressArea">
+						〒${userInf.postalCode} ${userInf.address}（${userInf.accountName}
+						様）<br> メールアドレス: ${userInf.email}
 					</div>
 				</div>
-			</div>
-		</div>
-		<h5 class="section-title fw-bold">お支払い方法の選択</h5>
-		<div class="card p-3 mb-4 bg-light">
-			<div class="form-check mb-2">
-				<input class="form-check-input" type="radio" name="paymentType"
-					id="payCredit" value="credit"
-					<c:if test="${empty paymentType || paymentType == 'credit'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="payCredit"> クレジットカード </label>
-			</div>
-			<div class="ms-4 mb-3" id="creditCardArea">
-				<c:choose>
-					<c:when test="${not empty cardList}">
-						<select name="selectedCardId" class="form-select">
-							<c:forEach var="card" items="${cardList}">
-								<option value="${card.cardId}"
-									<c:if test="${card.cardId == selectedCardId}">selected</c:if>>
-									カード番号: **** **** **** ${card.number.substring(card.number.length() - 4)}
-									(有効期限: ${card.expiry})
-								</option>
-							</c:forEach>
-						</select>
-					</c:when>
-					<c:otherwise>
-						<p class="text-danger small mb-0">登録されているクレジットカードがありません。</p>
-					</c:otherwise>
-				</c:choose>
-			</div>
-			<div class="form-check mb-2">
-				<input class="form-check-input" type="radio" name="paymentType"
-					id="payCod" value="cod"
-					<c:if test="${paymentType == 'cod'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="payCod"> 代金引換（代引き） </label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="radio" name="paymentType"
-					id="payConvenience" value="convenience"
-					<c:if test="${paymentType == 'convenience'}">checked</c:if>>
-				<label class="form-check-label fw-bold" for="payConvenience"> コンビニ決済 </label>
-			</div>
-		</div>
 
-		<div class="d-flex justify-content-between mt-4">
-			<a href="BookServlet?action=book_list" class="btn btn-secondary btn-lg">書籍一覧へ戻る</a>
-			<button type="submit" name="action" value="orderConfirm" class="btn btn-primary btn-lg px-5">次へ</button>
-		</div>
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="addressType"
+						id="addrRegistered" value="registered"
+						<c:if test="${addressType == 'registered'}">checked</c:if>>
+					<label class="form-check-label fw-bold" for="addrRegistered">
+						登録済みのお届け先から選択 </label>
+				</div>
+				<div class="ms-4 mb-3 d-none" id="registeredAddressArea">
+					<c:choose>
+						<c:when test="${not empty addressList}">
+							<select name="selectedAddressId" id="addressSelect"
+								class="form-select">
+								<c:forEach var="addr" items="${addressList}">
+									<option value="${addr.addressId}"
+										<c:if test="${addr.addressId == selectedCardId || addr.addressId == selectedAddressId}">selected</c:if>>
+										〒${addr.postalCode} ${addr.address} (${addr.name} 様)
+										[${addr.email}]</option>
+								</c:forEach>
+							</select>
+						</c:when>
+						<c:otherwise>
+							<p class="text-danger small mb-0">登録されている別のお届け先がありません。</p>
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<div class="form-check mb-2">
+					<input class="form-check-input" type="radio" name="addressType"
+						id="addrNew" value="new"
+						<c:if test="${addressType == 'new'}">checked</c:if>> <label
+						class="form-check-label fw-bold" for="addrNew">
+						新しいお届け先を指定する </label>
+				</div>
+				<div class="ms-4 mb-2 d-none card p-3 bg-white" id="newAddressArea">
+					<div class="row g-3">
+						<div class="col-md-6">
+							<label class="form-label small fw-bold">受取人氏名</label> <input
+								type="text" name="newRecipientName" class="form-control"
+								placeholder="例：山田 太郎" value="${newAddressInf.name}">
+						</div>
+						<div class="col-md-6">
+							<label class="form-label small fw-bold">郵便番号</label> <input
+								type="text" name="newPostalCode" class="form-control"
+								placeholder="例：000-0000" value="${newAddressInf.postalCode}">
+						</div>
+						<div class="col-12">
+							<label class="form-label small fw-bold">住所</label> <input
+								type="text" name="newAddress" class="form-control"
+								placeholder="例：東京都千代田区..." value="${newAddressInf.address}">
+						</div>
+						<div class="col-12">
+							<label class="form-label small fw-bold">メールアドレス</label> <input
+								type="text" name="newEmail" class="form-control"
+								placeholder="例：example@domain.com"
+								value="${newAddressInf.email}">
+						</div>
+					</div>
+				</div>
+			</div>
+<h5 class="section-title fw-bold">お支払い方法の選択</h5>
+<div class="card p-3 mb-4 bg-light">
+	<!-- クレジットカード -->
+	<div class="form-check mb-2">
+		<input class="form-check-input" type="radio" name="paymentType"
+			id="payCredit" value="credit"
+			<c:if test="${empty isReOrder || !isReOrder || paymentType == 'credit'}">checked</c:if>>
+		<label class="form-check-label fw-bold" for="payCredit">
+			クレジットカード
+		</label>
+	</div>
+	
+	<div class="ms-4 mb-3" id="creditCardArea">
+		<c:choose>
+			<c:when test="${not empty cardList}">
+				<select name="selectedCardId" class="form-select">
+					<c:forEach var="card" items="${cardList}" varStatus="status">
+						<option value="${card.cardId}"
+							<c:choose>
+								<%-- 戻り時(isReOrder==true): 前回選択したカードIDと一致する場合 --%>
+								<c:when test="${isReOrder}">
+									<c:if test="${card.cardId == selectedCardId}">selected</c:if>
+								</c:when>
+								<%-- 初回(isReOrderがnullまたはfalse): 1件目のカード(メイン)を選択 --%>
+								<c:otherwise>
+									<c:if test="${status.first}">selected</c:if>
+								</c:otherwise>
+							</c:choose>>
+							カード番号: **** **** **** ${card.number.substring(card.number.length() - 4)}
+							(有効期限: ${card.expiry})
+						</option>
+					</c:forEach>
+				</select>
+			</c:when>
+			<c:otherwise>
+				<p class="text-danger small mb-0">登録されているクレジットカードがありません。</p>
+			</c:otherwise>
+		</c:choose>
+	</div>
+
+	<!-- 代金引換 -->
+	<div class="form-check mb-2">
+		<input class="form-check-input" type="radio" name="paymentType"
+			id="payCod" value="cod"
+			<c:if test="${isReOrder && paymentType == 'cod'}">checked</c:if>>
+		<label class="form-check-label fw-bold" for="payCod"> 代金引換（代引き） </label>
+	</div>
+
+	<!-- コンビニ決済 -->
+	<div class="form-check">
+		<input class="form-check-input" type="radio" name="paymentType"
+			id="payConvenience" value="convenience"
+			<c:if test="${isReOrder && paymentType == 'convenience'}">checked</c:if>>
+		<label class="form-check-label fw-bold" for="payConvenience"> コンビニ決済 </label>
+	</div>
+</div>
+			<div class="d-flex justify-content-between mt-4">
+				<a href="MainServlet?action=book_list"
+					class="btn btn-secondary btn-lg">書籍一覧へ戻る</a>
+				<button type="submit" name="action" value="orderConfirm"
+					class="btn btn-primary btn-lg px-5">次へ</button>
+			</div>
 	</form>
 	<c:if test="${not empty sessionScope.loginSuccessMessage}">
 		<script>
 			alert("${sessionScope.loginSuccessMessage}");
 		</script>
-		<c:remove var="loginMessage" scope="session" />
+		<c:remove var="loginSuccessMessage" scope="session" />
 	</c:if>
 
 	<script>
@@ -193,7 +217,8 @@
 		const addrNew = document.getElementById('addrNew');
 
 		const selfAddressArea = document.getElementById('selfAddressArea');
-		const registeredAddressArea = document.getElementById('registeredAddressArea');
+		const registeredAddressArea = document
+				.getElementById('registeredAddressArea');
 		const newAddressArea = document.getElementById('newAddressArea');
 
 		function toggleAddressArea() {

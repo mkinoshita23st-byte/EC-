@@ -46,12 +46,12 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<form method="GET" action="BookServlet">
+<form method="GET" action="MainServlet">
 	<!-- タイトルをクラスで指定 -->
 	<div class="title">福岡書店</div>
 	<div class="button-container">
-	<a href="BookServlet?action=book_list" class="btn btn-secondary">書籍一覧を見る</a>
-	<a href="BookServlet?action=cart_view" class="btn btn-secondary">カート確認</a>
+	<a href="MainServlet?action=book_list" class="btn btn-secondary">書籍一覧を見る</a>
+	<a href="MainServlet?action=cart_view" class="btn btn-secondary">カート確認</a>
 	</div>
 </form>
 </body>
