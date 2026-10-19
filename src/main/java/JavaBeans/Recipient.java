@@ -2,13 +2,41 @@ package JavaBeans;
 
 import java.io.Serializable;
 
-public class Recipient implements Serializable{
+public class Recipient implements Serializable {
+	private String firstName;
+	private String middleName;
+	private String lastName;
 	private String name;
 	private String postalCode;
 	private String address;
 	private String email;
-	
-	public Recipient() {}
+
+	public Recipient() {
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public String getName() {
 		return name;
@@ -41,6 +69,4 @@ public class Recipient implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
 }

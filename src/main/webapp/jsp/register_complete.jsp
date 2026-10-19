@@ -26,13 +26,13 @@
 </style>
 </head>
 <body>
-	<form method="GET" action="BookServlet">
+	<form method="GET" action="MainServlet">
 		<c:choose>
 			<c:when test="${totalQuantity=="registered"}">
 				<div>
 					<h1>新規登録結果</h1>
-					以下の内容で登録しました<br>
-					アカウント名：${login.account_name}さん<br>
+					登録しました<br>
+					ようこそ<br>
 					ユーザーID　：${login.user_id}さん<br>
 				</div>
 				<button type="submit" name="action" value="login">ログインページへ</a>

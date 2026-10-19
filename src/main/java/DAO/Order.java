@@ -24,7 +24,14 @@ public class Order {
 					try (ResultSet rs = ps.executeQuery()) {
 	                    if (rs.next()) {
 							orderInf=new JavaBeans.Order();
-							orderInf.setName(rs.getString("account_name"));
+							orderInf.setFirstName(rs.getString("first_name"));
+							orderInf.setMiddleName(rs.getString("middle_name"));
+							orderInf.setLastName(rs.getString("last_name"));
+							if(orderInf.getMiddleName()==null || orderInf.getMiddleName().isEmpty()) {
+								orderInf.setName(orderInf.getLastName()+" "+orderInf.getFirstName());
+							}else {
+								orderInf.setName(orderInf.getFirstName()+"・"+orderInf.getMiddleName()+"・"+orderInf.getLastName());
+							}
 							orderInf.setPostalCode(rs.getString("postal_code"));
 							orderInf.setAddress(rs.getString("address"));
 							orderInf.setEmail(rs.getString("email"));

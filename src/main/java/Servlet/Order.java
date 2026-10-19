@@ -112,7 +112,7 @@ public class Order extends HttpServlet {
 					session.setAttribute("newAddressInf", newAddressInf);
 
 					// 贈答用の場合は Recipient にもセット
-					if (orderInf.getName() != null && !orderInf.getName().equals(userInf.getAccountName())) {
+					if (orderInf.getName() != null && !orderInf.getName().equals(userInf.getName())) {
 						orderInf.setIsRecipient(true);
 						JavaBeans.Recipient recipientInf = new JavaBeans.Recipient();
 						recipientInf.setName(newAddressInf.getName());
@@ -149,10 +149,6 @@ public class Order extends HttpServlet {
 					}
 				}
 			}
-
-			int userId = userInf.getId();
-			DAO.Cart cartDao = new DAO.Cart();
-			cartDao.clearCartData(userId);
 			session.setAttribute("orderInf", orderInf);
 		}
 		case "reOrder" -> { // 確認から入力画面へ戻る処理
@@ -180,16 +176,18 @@ public class Order extends HttpServlet {
 				JavaBeans.Recipient recipientInf = (JavaBeans.Recipient) session.getAttribute("recipientInf");
 				sender.sendMailForRecipient(bookCartList, orderInf, recipientInf);
 			}
-			//情報の初期化
-			for (JavaBeans.Book book : bookCartList) {
-				book.setBeforeCartCnt(0);
-				book.setCartCnt(0);
-			}
+			//DBのカート情報を消す
+			JavaBeans.User userInf = (JavaBeans.User) session.getAttribute("userInf");
+			int userId = userInf.getId();
+			DAO.Cart cartDao = new DAO.Cart();
+			cartDao.clearCartData(userId);
+			//新住所の入力があった場合の処理
 			boolean isNewAddress = (boolean) session.getAttribute("isNewAddress");
 			if (isNewAddress) {
 				session.setAttribute("newAddressMessage", "新しいお届け先をマイページに保存しますか？");
 				forwardPath = "add_newaddress";
 			}
+			//sessionの更新
 			session.setAttribute("bookCartList", bookCartList);//カート情報部分初期化				
 			session.setAttribute("totalPrice", 0);//初期化
 			session.setAttribute("totalQuantity", 0);//初期化
@@ -231,8 +229,7 @@ public class Order extends HttpServlet {
 		default -> {
 			forwardPath = "top";
 		}
-		}
-		;
+		};
 		//画面遷移のためdoGetへ移動
 		response.sendRedirect(request.getContextPath() + "/MainServlet?action=" + forwardPath);
 

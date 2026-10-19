@@ -32,7 +32,14 @@ public class User {
 						userInf = new JavaBeans.User();
 						userInf.setId(rs.getInt("id"));
 						userInf.setUserId(rs.getString("user_id")); 
-						userInf.setAccountName(rs.getString("account_name"));
+						userInf.setFirstName(rs.getString("first_name"));
+						userInf.setMiddleName(rs.getString("middle_name"));
+						userInf.setLastName(rs.getString("last_name"));
+						if(userInf.getMiddleName()==null || userInf.getMiddleName().isEmpty()) {
+							userInf.setName(userInf.getLastName()+" "+userInf.getFirstName());
+						}else {
+							userInf.setName(userInf.getFirstName()+"・"+userInf.getMiddleName()+"・"+userInf.getLastName());
+						}
 						userInf.setPostalCode(rs.getString("postal_code"));
 						userInf.setAddress(rs.getString("address"));
 						userInf.setEmail(rs.getString("email"));
@@ -49,7 +56,7 @@ public class User {
 		return new LoginResult(isSuccess, userInf);
 	}
 	//マイページ更新
-	public void updateMyPage(int id,int userId,String accountName,
+	public void updateMyPage(int id,int userId,String firstName,String middleName,String lastName,
 			String address,String email,String password) {
 		try {
 			Context context=new InitialContext();
@@ -57,16 +64,17 @@ public class User {
 					"java:comp/env/jdbc/abcdpool");
 			try (Connection db=ds.getConnection()){
 				PreparedStatement ps=db.prepareStatement(
-						"UPDATE usr_mypage SET user_id=?,account_name=?,"
-						+ "address=?,email=?,password=?"
-						+ " WHERE id = ?;");
+					"UPDATE usr_mypage SET user_id=?,first_name=?,middle_name=?,last_name=?,"
+					+ "address=?,email=?,password=? WHERE id = ?;");
 	            // 各項目（?）に更新情報をセット
 	            ps.setInt(1,userId);
-	            ps.setString(2,accountName);
-	            ps.setString(3,address);
-	            ps.setString(4,email);
-	            ps.setString(5,password);
-	            ps.setInt(6,id);
+	            ps.setString(2,firstName);
+	            ps.setString(3,middleName);
+	            ps.setString(4,lastName);
+	            ps.setString(5,address);
+	            ps.setString(6,email);
+	            ps.setString(7,password);
+	            ps.setInt(8,id);
 	            ps.executeUpdate();
 			}//catch略
 		}catch(NamingException | SQLException e){

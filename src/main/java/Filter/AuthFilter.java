@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import JavaBeans.Order;
-
 public class AuthFilter implements Filter {
 	private String path=null;
 	
@@ -39,11 +37,11 @@ public class AuthFilter implements Filter {
             if (!orderList.getIsLogin()) {
                 // 未ログインの場合,ログイン画面へリダイレクト
                 session.setAttribute("loginMessage", "購入画面に進むにはログインしてください");
-                res.sendRedirect(req.getContextPath() + "/BookServlet?action=login");
+                res.sendRedirect(req.getContextPath() + "/LoginServlet?action=login");
                 return;
             }
         }
-        // BookServletへ
+        // LoginServletへ
         chain.doFilter(request, response);
     }
 

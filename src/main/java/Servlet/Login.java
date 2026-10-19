@@ -49,6 +49,7 @@ public class Login extends HttpServlet {
 						orderInf.setIsLogin(result.getIsSuccess());
 						//カート情報取得
 						int totalQuantity = (Integer) session.getAttribute("totalQuantity");
+						int totalPrice = (Integer) session.getAttribute("totalPrice");
 						List<JavaBeans.Book> bookCartList = (List<JavaBeans.Book>) session.getAttribute("bookCartList");
 						DAO.Cart cartDao = new DAO.Cart();
 						List<JavaBeans.Cart> cartList = (List<JavaBeans.Cart>) cartDao.getCartData(userId);
@@ -56,6 +57,8 @@ public class Login extends HttpServlet {
 							for (JavaBeans.Book book : bookCartList) {
 								if (cart.getIsbn().equals(book.getIsbn())) {
 									book.setCartCnt(book.getCartCnt() + cart.getQuantity());
+									totalQuantity += cart.getQuantity();
+									totalPrice += cart.getQuantity() * book.getPrice();
 								}
 							}
 						}
@@ -64,6 +67,8 @@ public class Login extends HttpServlet {
 						session.setAttribute("cardList", cardList);//生成
 						session.setAttribute("orderInf", orderInf);//情報追加
 						session.setAttribute("bookCartList", bookCartList);//情報追加
+						session.setAttribute("totalQuantity", totalQuantity);
+						session.setAttribute("totalPrice", totalPrice);
 						//削除
 						session.removeAttribute("inputId");
 						session.removeAttribute("isReLogin");
@@ -87,6 +92,7 @@ public class Login extends HttpServlet {
 					book.setCartCnt(0);
 				}
 				JavaBeans.Order orderInf = new JavaBeans.Order();
+				orderInf.setIsLogin(false);
 				int totalPrice = 0;
 				int totalQuantity = 0;
 				session.setAttribute("bookCartList", bookCartList);//カート情報部分削除
@@ -109,6 +115,7 @@ public class Login extends HttpServlet {
 					System.out.println( book.getIsbn() + book.getCartCnt());
 				}
 				JavaBeans.Order orderInf = new JavaBeans.Order();
+				orderInf.setIsLogin(false);
 				int userId = ((JavaBeans.User) session.getAttribute("userInf")).getId();
 				DAO.Cart cartDao = new DAO.Cart();
 				for (JavaBeans.Book book : bookCartList) {

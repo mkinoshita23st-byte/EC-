@@ -14,104 +14,118 @@ import javax.sql.DataSource;
 
 public class Address {
 	//宛先情報取得
-	public List<JavaBeans.Address>getAddressData(String id){
-		List<JavaBeans.Address> list=new ArrayList<>();
+	public List<JavaBeans.Address> getAddressData(String id) {
+		List<JavaBeans.Address> list = new ArrayList<>();
 		try {
-			Context context=new InitialContext();
-			DataSource ds=(DataSource)context.lookup(
+			Context context = new InitialContext();
+			DataSource ds = (DataSource) context.lookup(
 					"java:comp/env/jdbc/abcdpool");
-				try (Connection db=ds.getConnection()){
-					PreparedStatement ps=db.prepareStatement(
-							"SELECT * FROM usr_addresses WHERE id = ? AND is_main = 0");
-					ps.setString(1,id);
-					try (ResultSet rs = ps.executeQuery()) {
-	                    while (rs.next()) {
-							JavaBeans.Address address=new JavaBeans.Address();
-							address.setId(rs.getInt("id"));
-							address.setAddressId(rs.getInt("address_id"));
-							address.setName(rs.getString("name"));
-							address.setPostalCode(rs.getString("postal_code"));
-							address.setAddress(rs.getString("address"));
-							address.setEmail(rs.getString("email"));
-							address.setIsMain(rs.getBoolean("is_main"));
-							address.setIsSelf(rs.getBoolean("is_self"));
-							list.add(address);
-	                    }
-					}//catch略
-				}//catch略
-		}catch(NamingException | SQLException e) {
+			try (Connection db = ds.getConnection()) {
+				PreparedStatement ps = db.prepareStatement(
+						"SELECT * FROM usr_addresses WHERE id = ? AND is_main = 0");
+				ps.setString(1, id);
+				try (ResultSet rs = ps.executeQuery()) {
+					while (rs.next()) {
+						JavaBeans.Address address = new JavaBeans.Address();
+						address.setId(rs.getInt("id"));
+						address.setAddressId(rs.getInt("address_id"));
+						address.setFirstName(rs.getString("first_name"));
+						address.setMiddleName(rs.getString("middle_name"));
+						address.setLastName(rs.getString("last_name"));
+						if(address.getMiddleName()==null || address.getMiddleName().isEmpty()) {
+							address.setName(address.getLastName()+" "+address.getFirstName());
+						}else {
+							address.setName(address.getFirstName()+"・"+address.getMiddleName()+"・"+address.getLastName());
+						}
+						address.setPostalCode(rs.getString("postal_code"));
+						address.setAddress(rs.getString("address"));
+						address.setEmail(rs.getString("email"));
+						address.setIsMain(rs.getBoolean("is_main"));
+						address.setIsSelf(rs.getBoolean("is_self"));
+						list.add(address);
+					}
+				} //catch略
+			} //catch略
+		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
+
 	//宛先更新(mainの変更アリだと元mainをfalseにする処理が必要(呼び出し先に任せる？）
-	public void updateAddress(List<JavaBeans.Address> addressList,int changeId) {
+	public void updateAddress(List<JavaBeans.Address> addressList, int changeId) {
 
 		try {
-			Context context=new InitialContext();
-			DataSource ds=(DataSource)context.lookup(
+			Context context = new InitialContext();
+			DataSource ds = (DataSource) context.lookup(
 					"java:comp/env/jdbc/abcdpool");
-			try (Connection db=ds.getConnection()){
-				PreparedStatement ps=db.prepareStatement(
-						"UPDATE usr_addresses SET address_id=?,name=?,"
-						+ "postal_code=?,address=?,email=?,is_main=?,is_self=?"
-						+ " WHERE id = ?;");
-				for(JavaBeans.Address addr:addressList) {
-					if(changeId==addr.getId()) {
-			            ps.setInt(1,addr.getAddressId());
-			            ps.setString(2,addr.getName());
-			            ps.setString(3,addr.getPostalCode());
-			            ps.setString(4,addr.getAddress());
-			            ps.setString(5,addr.getEmail());
-			            ps.setBoolean(6,addr.getIsMain());
-			            ps.setBoolean(7,addr.getIsSelf());
-			            ps.setInt(8,addr.getId());
-			            ps.executeUpdate();
+			try (Connection db = ds.getConnection()) {
+				PreparedStatement ps = db.prepareStatement(
+						"UPDATE usr_addresses SET address_id=?,first_name=?,middle_name=?,last_name=?,"
+								+ "postal_code=?,address=?,email=?,is_main=?,is_self=? WHERE id = ?;");
+				for (JavaBeans.Address address : addressList) {
+					if (changeId == address.getId()) {
+						ps.setInt(1, address.getAddressId());
+						ps.setString(2, address.getFirstName());
+						ps.setString(3, address.getMiddleName());
+						ps.setString(4, address.getLastName());
+						ps.setString(5, address.getPostalCode());
+						ps.setString(6, address.getAddress());
+						ps.setString(7, address.getEmail());
+						ps.setBoolean(8, address.getIsMain());
+						ps.setBoolean(9, address.getIsSelf());
+						ps.setInt(10, address.getId());
+						ps.executeUpdate();
 					}
 				}
-			}//catch略
-		}catch(NamingException | SQLException e){
+			} //catch略
+		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
 	//新住所追加
-	public void addAddress(JavaBeans.Address newAddressInf,JavaBeans.User userInf) {
-		int id=userInf.getId();
+	public void addAddress(JavaBeans.Address newAddressInf, JavaBeans.User userInf) {
+		int id = userInf.getId();
+		String userName = userInf.getName();
 		//int addressIdは自動割り振り
-		String name=newAddressInf.getName();
-		String postalCode=newAddressInf.getPostalCode();
-		String address=newAddressInf.getAddress();
-		String email=newAddressInf.getEmail();
-		Boolean isMain=false;
+		String newAddressName = newAddressInf.getName();
+		String firstName = newAddressInf.getFirstName();
+		String middleName = newAddressInf.getMiddleName();
+		String lastName = newAddressInf.getLastName();
+		String postalCode = newAddressInf.getPostalCode();
+		String address = newAddressInf.getAddress();
+		String email = newAddressInf.getEmail();
+		Boolean isMain = false;
 		Boolean isSelf;
-		if(name==userInf.getAccountName()) {
-			isSelf=true;
-		}else {
-			isSelf=false;
+		if (newAddressName == userName) {
+			isSelf = true;
+		} else {
+			isSelf = false;
 		}
-		
 		try {
-			Context context=new InitialContext();
-			DataSource ds=(DataSource)context.lookup(
+			Context context = new InitialContext();
+			DataSource ds = (DataSource) context.lookup(
 					"java:comp/env/jdbc/abcdpool");
-			try (Connection db=ds.getConnection()){
-				PreparedStatement ps=db.prepareStatement(
-						"INSERT INTO usr_addresses (id, name, postal_code, "
-						+ "address, email, is_main, is_self) "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?);");
-	            // 各項目（?）に更新情報をセット
-	            ps.setInt(1,id);
-	            ps.setString(2,name);
-	            ps.setString(3,postalCode);
-	            ps.setString(4,address);
-	            ps.setString(5,email);
-	            ps.setBoolean(6,isMain);
-	            ps.setBoolean(7,isSelf);
-	            ps.executeUpdate();
-			}//catch略
-		}catch(NamingException | SQLException e){
+			try (Connection db = ds.getConnection()) {
+				PreparedStatement ps = db.prepareStatement(
+						"INSERT INTO usr_addresses (id, first_name,middle_name,last_name,"
+						+ " postal_code, address, email, is_main, is_self) "
+								+ "VALUES (?, ?, ?, ?, ?, ?, ?,?,?);");
+				// 各項目（?）に更新情報をセット
+				ps.setInt(1, id);
+				ps.setString(2, firstName);
+				ps.setString(3, middleName);
+				ps.setString(4, lastName);
+				ps.setString(5, postalCode);
+				ps.setString(6, address);
+				ps.setString(7, email);
+				ps.setBoolean(8, isMain);
+				ps.setBoolean(9, isSelf);
+				ps.executeUpdate();
+			} //catch略
+		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 }
-

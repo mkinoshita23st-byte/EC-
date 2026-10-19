@@ -27,19 +27,14 @@
 </style>
 </head>
 <body>
-	<form method="GET" action="BookServlet">
+	<form method="GET" action="MainServlet">
 		<c:choose>
 			<c:when test="${totalQuantity=="true"}">
 				<div>
-					<h1>変更後の内容</h1>
-					<h2>以下の内容で登録しました</h2>
-					ユーザーID　　　　　：${login.user_id}<br>
-					氏名（アカウント名）：${login.account_name}<br>
-					住所　　　　　　　　：${login.address}
-					メールアドレス　　　：${login.email}<br>
-					パスワード　　　　　：${login.password}<br><!-- *****にする -->
+					<h1>マイページ情報を変更しました</h1>
 				</div>
-				<button type="submit" name="action" value="login">ログインページへ</button>
+				<button type="submit" name="action" value="mypage_view">マイページへ戻る</button>
+				<button type="submit" name="action" value="top">TOP画面へ戻る</button>
 			</c:when>
 			<c:otherwise>
 				<h4 class="text-warning fw-bold mb-3">システムエラー</h4>

@@ -85,7 +85,7 @@
 								〒${recipientInf.postalCode}<br> ${recipientInf.address}<br>
 								受取人:${recipientInf.name} 様<br> メールアドレス:
 								${recipientInf.email}
-								</p>
+							</p>
 						</c:otherwise>
 					</c:choose>
 				</c:when>
@@ -107,22 +107,6 @@
 					${orderCardInf.number.substring(orderCardInf.number.length() - 4)}
 					(有効期限: ${orderCardInf.expiry} ${orderCardInf.holder})</p>
 			</c:if>
-			<c:choose>
-				<c:when test="${orderInf.selectedPayment=='クレジットカード'}">
-					<c:forEach var="card" items="${cardList}">
-						<c:if test="${card.cardId == selectedCardId}">
-							<p class="mb-0 text-muted">
-								カード番号: **** **** ****
-								${card.number.substring(card.number.length() - 4)} (有効期限:
-								${card.expiry})
-							</p>
-						</c:if>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<p class="mb-1 fw-bold"></p>
-				</c:otherwise>
-			</c:choose>
 		</div>
 		<input type="hidden" name="addressType" value="${addressType}">
 		<input type="hidden" name="selectedAddressId"

@@ -77,7 +77,7 @@
 					<label class="form-check-label fw-bold" for="myAddress">
 						ご自宅（会員登録住所へ送る） </label>
 					<div class="text-muted small ms-3" id="selfAddressArea">
-						〒${userInf.postalCode} ${userInf.address}（${userInf.accountName}
+						〒${userInf.postalCode} ${userInf.address}（${userInf.name}
 						様）<br> メールアドレス: ${userInf.email}
 					</div>
 				</div>
