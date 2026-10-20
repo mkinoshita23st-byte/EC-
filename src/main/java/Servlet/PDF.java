@@ -31,8 +31,9 @@ public class PDF {
     public String createInvoice(JavaBeans.Order orderInf)
     		throws ServletException, IOException {
         String name = orderInf.getName();
-        String postalCode = orderInf.getPostalCode();
         String address = orderInf.getAddress();
+        String postalCode = orderInf.getPostalCode();
+        postalCode = "〒" + postalCode.substring(0, 3) + "-" + postalCode.substring(3);
         
         // 注文日取得
         LocalDate today = LocalDate.now();
@@ -151,8 +152,9 @@ public class PDF {
     		throws ServletException, IOException {
         String userName = orderInf.getName();
         String recipientName = recipientInf.getName();
-        String postalCode = recipientInf.getPostalCode();
         String address = recipientInf.getAddress();
+        String postalCode = recipientInf.getPostalCode();
+        postalCode = "〒" + postalCode.substring(0, 3) + "-" + postalCode.substring(3);
     	
         //PDFファイル保存先設定
         String tempDir = System.getProperty("java.io.tmpdir");

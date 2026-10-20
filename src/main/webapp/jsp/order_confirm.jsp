@@ -76,7 +76,8 @@
 					<c:choose>
 						<c:when test="${!orderInf.isRecipient}">
 							<p class="mb-0 text-muted">
-								〒${orderInf.postalCode}<br> ${orderInf.address}<br>
+								〒${orderInf.getPostalCode().substring(0, 3)}-${orderInf.getPostalCode().substring(3)}<br>
+								 ${orderInf.address}<br>
 								受取人:${orderInf.name} 様<br> メールアドレス: ${orderInf.email}
 							</p>
 						</c:when>
@@ -92,7 +93,8 @@
 				<c:otherwise>
 					<p class="mb-1 fw-bold">新住所</p>
 					<p class="mb-0 text-muted">
-						〒${newAddressInf.postalCode}<br> ${newAddressInf.address}<br>
+						〒${newAddressInf.getPostalCode().substring(0, 3)}-${newAddressInf.getPostalCode().substring(3)}<br>
+						 ${newAddressInf.address}<br>
 						受取人:${newAddressInf.name} 様<br> メールアドレス:
 						${newAddressInf.email}
 					</p>
@@ -108,15 +110,7 @@
 					(有効期限: ${orderCardInf.expiry} ${orderCardInf.holder})</p>
 			</c:if>
 		</div>
-		<input type="hidden" name="addressType" value="${addressType}">
-		<input type="hidden" name="selectedAddressId"
-			value="${selectedAddressId}"> <input type="hidden"
-			name="newRecipientName" value="${newRecipientName}"> <input
-			type="hidden" name="newPostalCode" value="${newPostalCode}">
-		<input type="hidden" name="newAddress" value="${newAddress}">
-		<input type="hidden" name="newEmail" value="${newEmail}"> <input
-			type="hidden" name="paymentType" value="${paymentType}"> <input
-			type="hidden" name="selectedCardId" value="${selectedCardId}">
+
 		<div class="d-flex justify-content-between mt-4">
 			<button type="submit" name="action" value="reOrder"
 				class="btn btn-secondary btn-lg">修正する</button>

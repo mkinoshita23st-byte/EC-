@@ -54,9 +54,10 @@ public class Order extends HttpServlet {
 		}
 		case "orderInput" -> {//
 			JavaBeans.Order orderInf = (JavaBeans.Order) session.getAttribute("orderInf");
-			if (orderInf.getIsLogin() == true) {
+
+			if (orderInf.getIsLogin() == true) {//ログイン済みの場合は購入画面へ遷移する
 				forwardPath = "order_input";
-			} else {
+			} else {//ログインが必要な場合はログイン画面へ遷移する
 				forwardPath = "login";
 				session.setAttribute("loginMessage", "購入画面に進むにはログインしてください");
 			}
@@ -65,53 +66,65 @@ public class Order extends HttpServlet {
 			forwardPath = "order_confirm";
 			JavaBeans.Order orderInf = (JavaBeans.Order) session.getAttribute("orderInf");
 			JavaBeans.User userInf = (JavaBeans.User) session.getAttribute("userInf");
-			
+
 			// 画面から渡されたパラメータを取得
 			String addressType = request.getParameter("addressType");
 			String paymentType = request.getParameter("paymentType");
 			String selectedCardId = request.getParameter("selectedCardId");
 
 			// お届け先情報の保持
-			session.setAttribute("addressType", addressType); // 選択種別(self/registered/new)のみ保持
+			session.setAttribute("addressType", addressType); // 選択種別(self/registered/new)を保持
 			session.setAttribute("isNewAddress", false);
-
-			if (addressType != null && !addressType.equals("self")) {
-				if (addressType.equals("registered")) { // 登録済み住所から選択
+			//お届け先情報の取得
+			if (addressType != null && !addressType.equals("self")) {//お届け先がメインの自分以外の場合
+				if (addressType.equals("registered")) { // 登録済み住所から選択の場合
 					int selectedAddressId = Integer.parseInt(request.getParameter("selectedAddressId"));
 					session.setAttribute("selectedAddressId", selectedAddressId);
-
 					List<JavaBeans.Address> addressList = (List<JavaBeans.Address>) session.getAttribute("addressList");
 					if (addressList != null) {
-						for (JavaBeans.Address add : addressList) {
-							if (add.getAddressId() == selectedAddressId) {
-								if (!add.getIsSelf()) { // 贈答用
+						for (JavaBeans.Address addr : addressList) {
+							if (addr.getAddressId() == selectedAddressId) {
+								if (!addr.getIsSelf()) { // 自分以外への贈答用
 									orderInf.setIsRecipient(true);
 									JavaBeans.Recipient recipientInf = new JavaBeans.Recipient();
-									recipientInf.setName(add.getName());
-									recipientInf.setPostalCode(add.getPostalCode());
-									recipientInf.setAddress(add.getAddress());
-									recipientInf.setEmail(add.getEmail());
+									recipientInf.setName(addr.getName());
+									recipientInf.setPostalCode(addr.getPostalCode());
+									recipientInf.setAddress(addr.getAddress());
+									recipientInf.setEmail(addr.getEmail());
 									session.setAttribute("recipientInf", recipientInf);
-								} else { // 住所が違う自分用
-									orderInf.setPostalCode(add.getPostalCode());
-									orderInf.setAddress(add.getAddress());
-									orderInf.setEmail(add.getEmail());
+								} else { // 住所が異なる自分用
+									orderInf.setPostalCode(addr.getPostalCode());
+									orderInf.setAddress(addr.getAddress());
+									orderInf.setEmail(addr.getEmail());
 								}
 							}
 						}
 					}
-				} else if (addressType.equals("new")) { // 新規入力住所
+				} else if (addressType.equals("new")) { // 新規入力住所の場合
 					session.setAttribute("isNewAddress", true);
-					
-					// JavaBeans.Address に一括保持
+					// 新住所情報をsessionに保存
 					JavaBeans.Address newAddressInf = new JavaBeans.Address();
-					newAddressInf.setName(request.getParameter("newRecipientName"));
+					newAddressInf.setLastName(request.getParameter("newRecipientLastName").trim());
+					newAddressInf.setFirstName(request.getParameter("newRecipientFirstName").trim());
+					String middleNameOption = request.getParameter("middleNameOption");
+					//ミドルネームの有無でフルネームを決定する
+					if (middleNameOption.equals("exists")) {
+						String newMiddleName = (request.getParameter("newRecipientMiddleName")).trim();
+						newAddressInf.setMiddleName(newMiddleName);
+						if (newMiddleName != null && !newMiddleName.isEmpty()) {
+						newAddressInf.setName(newAddressInf.getFirstName() + "・"
+								+ newAddressInf.getMiddleName() + "・" + newAddressInf.getLastName());	
+						}else {
+							newAddressInf.setName(newAddressInf.getLastName() + " " + newAddressInf.getFirstName());
+						}
+					} else {//middleNameOption.equals("none")
+						newAddressInf.setName(newAddressInf.getLastName() + " " + newAddressInf.getFirstName());
+					}
 					newAddressInf.setPostalCode(request.getParameter("newPostalCode"));
 					newAddressInf.setAddress(request.getParameter("newAddress"));
 					newAddressInf.setEmail(request.getParameter("newEmail"));
 					session.setAttribute("newAddressInf", newAddressInf);
-
-					// 贈答用の場合は Recipient にもセット
+					// お届け先が自分以外の場合は Recipient にもお届け先をセット
 					if (orderInf.getName() != null && !orderInf.getName().equals(userInf.getName())) {
 						orderInf.setIsRecipient(true);
 						JavaBeans.Recipient recipientInf = new JavaBeans.Recipient();
@@ -123,17 +136,15 @@ public class Order extends HttpServlet {
 					}
 				}
 			}
-
-			// 支払方法の決定と保持
+			// 支払方法
 			session.setAttribute("paymentType", paymentType); // 選択種別(credit/cod/convenience)
 			String displayPaymentType = "credit".equals(paymentType) ? "クレジットカード"
 					: "cod".equals(paymentType) ? "代金引換（代引き）" : "コンビニ決済";
 			orderInf.setSelectedPayment(displayPaymentType);
-
+			//クレジットカードの場合カード情報をsessionに保存
 			if ("credit".equals(paymentType) && selectedCardId != null) {
 				int cardId = Integer.parseInt(selectedCardId);
 				session.setAttribute("selectedCardId", cardId);
-
 				List<JavaBeans.Card> cardList = (List<JavaBeans.Card>) session.getAttribute("cardList");
 				if (cardList != null) {
 					JavaBeans.Card orderCardInf = new JavaBeans.Card();
@@ -214,6 +225,7 @@ public class Order extends HttpServlet {
 			JavaBeans.Order orderInf = (JavaBeans.Order) session.getAttribute("orderInf");
 			orderInf.setSelectedPayment(null);
 			orderInf.setIsRecipient(false);
+
 			int totalPrice = 0;
 			int totalQuantity = 0;
 			//継続情報（Address,Card,Userは継続）
@@ -229,7 +241,8 @@ public class Order extends HttpServlet {
 		default -> {
 			forwardPath = "top";
 		}
-		};
+		}
+		;
 		//画面遷移のためdoGetへ移動
 		response.sendRedirect(request.getContextPath() + "/MainServlet?action=" + forwardPath);
 

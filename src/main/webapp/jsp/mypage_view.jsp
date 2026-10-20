@@ -32,9 +32,11 @@
 
 			<div class="card mb-4 shadow-sm">
 				<div class="card-body">
-					<div class="d-flex justify-content-between align-items-center section-header">
+					<div
+						class="d-flex justify-content-between align-items-center section-header">
 						<h4 class="card-title text-primary mb-0">基本会員情報</h4>
-						<a href="MainServlet?action=mypage_edit" class="btn btn-sm btn-outline-primary">+ 基本会員情報を編集</a>
+						<a href="MainServlet?action=mypage_edit"
+							class="btn btn-sm btn-outline-primary">+ 基本会員情報を編集</a>
 					</div>
 					<div class="row mb-2">
 						<div class="col-sm-3 fw-bold">ユーザーID</div>
@@ -51,7 +53,8 @@
 					<div class="row mb-2">
 						<div class="col-sm-3 fw-bold">ご自宅住所</div>
 						<div class="col-sm-9">
-							〒${userInf.getPostalCode()}<br>${userInf.getAddress()}
+							〒${userInf.getPostalCode().substring(0, 3)}-${userInf.getPostalCode().substring(3)}<br>
+							${userInf.getAddress()}
 						</div>
 					</div>
 				</div>
@@ -59,9 +62,11 @@
 
 			<div class="card mb-4 shadow-sm">
 				<div class="card-body">
-					<div class="d-flex justify-content-between align-items-center section-header">
+					<div
+						class="d-flex justify-content-between align-items-center section-header">
 						<h4 class="card-title text-primary mb-0">お届け先住所一覧</h4>
-						<button type="button" id="toggleNewAddressBtn" class="btn btn-sm btn-outline-primary">+ 新しいお届け先を追加</button>
+						<button type="button" id="toggleNewAddressBtn"
+							class="btn btn-sm btn-outline-primary">+ 新しいお届け先を追加</button>
 					</div>
 					<div class="table-responsive mb-4">
 						<table class="table table-hover align-middle">
@@ -78,14 +83,12 @@
 								<c:forEach var="address" items="${addressList}">
 									<tr>
 										<td>${address.getName()}</td>
-										<td>${address.getPostalCode().substring(0, 3)}-${address.getPostalCode().substring(3)}</td>
+										<td>〒${address.getPostalCode().substring(0, 3)}-${address.getPostalCode().substring(3)}</td>
 										<td>${address.getAddress()}</td>
 										<td>${address.getEmail()}</td>
-										<td>
-											<c:if test="${address.getIsMain()}">
+										<td><c:if test="${address.getIsMain()}">
 												<span class="badge badge-main">メイン住所</span>
-											</c:if>
-										</td>
+											</c:if></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -96,38 +99,42 @@
 						<h5 class="fw-bold mb-3 text-secondary">新しいお届け先の入力</h5>
 						<div class="row g-3">
 							<div class="col-md-6">
-								<label class="form-label small fw-bold">受取人氏名</label> 
-								<input type="text" name="newRecipientName" class="form-control"
+								<label class="form-label small fw-bold">受取人氏名</label> <input
+									type="text" name="newRecipientName" class="form-control"
 									placeholder="例：山田 太郎" value="${newAddressInf.name}">
 							</div>
 							<div class="col-md-6">
-								<label class="form-label small fw-bold">郵便番号</label> 
-								<input type="text" name="newPostalCode" class="form-control"
-									placeholder="例：000-0000" value="${newAddressInf.postalCode}">
+								<label class="form-label small fw-bold">郵便番号</label> <input
+									type="text" name="newPostalCode" class="form-control"
+									placeholder="例：000-0000" value="〒${newAddressInf.getPostalCode().substring(0, 3)}-${newAddressInf.getPostalCode().substring(3)}">
 							</div>
 							<div class="col-12">
-								<label class="form-label small fw-bold">住所</label> 
-								<input type="text" name="newAddress" class="form-control"
+								<label class="form-label small fw-bold">住所</label> <input
+									type="text" name="newAddress" class="form-control"
 									placeholder="例：東京都千代田区..." value="${newAddressInf.address}">
 							</div>
 							<div class="col-12">
-								<label class="form-label small fw-bold">メールアドレス</label> 
-								<input type="text" name="newEmail" class="form-control"
-									placeholder="例：example@domain.com" value="${newAddressInf.email}">
+								<label class="form-label small fw-bold">メールアドレス</label> <input
+									type="text" name="newEmail" class="form-control"
+									placeholder="例：example@domain.com"
+									value="${newAddressInf.email}">
 							</div>
 							<div class="col-12">
 								<label class="form-label small fw-bold d-block">メインの住所に設定しますか？</label>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainAddress" id="addressMainYes" value="true">
+									<input class="form-check-input" type="radio"
+										name="isMainAddress" id="addressMainYes" value="true">
 									<label class="form-check-label" for="addressMainYes">はい</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainAddress" id="addressMainNo" value="false" checked>
+									<input class="form-check-input" type="radio"
+										name="isMainAddress" id="addressMainNo" value="false" checked>
 									<label class="form-check-label" for="addressMainNo">いいえ</label>
 								</div>
 							</div>
 							<div class="col-12 text-end mt-3">
-								<button type="submit" name="action" value="addNewAddress" class="btn btn-success px-4">このお届け先を登録する</button>
+								<button type="submit" name="action" value="addNewAddress"
+									class="btn btn-success px-4">このお届け先を登録する</button>
 							</div>
 						</div>
 					</div>
@@ -137,11 +144,13 @@
 
 			<div class="card mb-4 shadow-sm">
 				<div class="card-body">
-					<div class="d-flex justify-content-between align-items-center section-header">
+					<div
+						class="d-flex justify-content-between align-items-center section-header">
 						<h4 class="card-title text-primary mb-0">登録クレジットカード情報</h4>
-						<button type="button" id="toggleNewCardBtn" class="btn btn-sm btn-outline-primary">+ 新しいカードを追加</button>
+						<button type="button" id="toggleNewCardBtn"
+							class="btn btn-sm btn-outline-primary">+ 新しいカードを追加</button>
 					</div>
-					
+
 					<div class="table-responsive mb-4">
 						<table class="table table-hover align-middle">
 							<thead class="table-light">
@@ -155,14 +164,13 @@
 							<tbody>
 								<c:forEach var="card" items="${cardList}">
 									<tr>
-										<td>**** **** **** ${card.number.substring(card.number.length() - 4)}</td>
+										<td>**** **** ****
+											${card.number.substring(card.number.length() - 4)}</td>
 										<td>${card.holder}</td>
 										<td>${card.expiry}</td>
-										<td>
-											<c:if test="${card.isMain}">
+										<td><c:if test="${card.isMain}">
 												<span class="badge badge-main">メイン使用</span>
-											</c:if>
-										</td>
+											</c:if></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -173,33 +181,36 @@
 						<h5 class="fw-bold mb-3 text-secondary">新しいクレジットカードの入力</h5>
 						<div class="row g-3">
 							<div class="col-md-6">
-								<label class="form-label small fw-bold">カード番号</label> 
-								<input type="text" name="newCardNumber" class="form-control"
+								<label class="form-label small fw-bold">カード番号</label> <input
+									type="text" name="newCardNumber" class="form-control"
 									placeholder="例：4111222233334444" value="${newCardInf.number}">
 							</div>
 							<div class="col-md-6">
-								<label class="form-label small fw-bold">名義人（ローマ字）</label> 
-								<input type="text" name="newCardHolder" class="form-control"
+								<label class="form-label small fw-bold">名義人（ローマ字）</label> <input
+									type="text" name="newCardHolder" class="form-control"
 									placeholder="例：TARO YAMADA" value="${newCardInf.holder}">
 							</div>
 							<div class="col-md-6">
-								<label class="form-label small fw-bold">有効期限 (月/年)</label> 
-								<input type="text" name="newCardExpiry" class="form-control"
+								<label class="form-label small fw-bold">有効期限 (月/年)</label> <input
+									type="text" name="newCardExpiry" class="form-control"
 									placeholder="例：12/26" value="${newCardInf.expiry}">
 							</div>
 							<div class="col-12">
 								<label class="form-label small fw-bold d-block">メインのカードに設定しますか？</label>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainCard" id="cardMainYes" value="true">
-									<label class="form-check-label" for="cardMainYes">はい</label>
+									<input class="form-check-input" type="radio" name="isMainCard"
+										id="cardMainYes" value="true"> <label
+										class="form-check-label" for="cardMainYes">はい</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainCard" id="cardMainNo" value="false" checked>
-									<label class="form-check-label" for="cardMainNo">いいえ</label>
+									<input class="form-check-input" type="radio" name="isMainCard"
+										id="cardMainNo" value="false" checked> <label
+										class="form-check-label" for="cardMainNo">いいえ</label>
 								</div>
 							</div>
 							<div class="col-12 text-end mt-3">
-								<button type="submit" name="action" value="addNewCard" class="btn btn-success px-4">このカードを登録する</button>
+								<button type="submit" name="action" value="addNewCard"
+									class="btn btn-success px-4">このカードを登録する</button>
 							</div>
 						</div>
 					</div>

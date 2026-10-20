@@ -52,15 +52,15 @@ public class Mail {
 			String userName = orderInf.getName();
 			StringBuilder selectBooks = new StringBuilder();//メールテキスト用意
 			for (JavaBeans.Book book : bookList) {
-			    int cartCnt = book.getCartCnt();
-			    //購入分だけ対象
-			    if (cartCnt > 0) {
-			        String line = String.format("%-30s %6d円 %3d冊\n", 
-			                book.getTitle(), 
-			                book.getPrice(), 
-			                book.getCartCnt());
-			        selectBooks.append(line);
-			    }
+				int cartCnt = book.getCartCnt();
+				//購入分だけ対象
+				if (cartCnt > 0) {
+					String line = String.format("%-30s %7d円 %3d冊\n",
+							book.getTitle(),
+							book.getPrice(),
+							book.getCartCnt());
+					selectBooks.append(line);
+				}
 			}
 			//注文日の取得
 			LocalDate today = LocalDate.now();
@@ -81,12 +81,13 @@ public class Mail {
 			//テキストセット
 			MimeBodyPart textPart = new MimeBodyPart();
 			String mailText = "注文完了のお知らせ\n"
-					+ orderInf.getName()+"様\n\n"
+					+ orderInf.getName() + "様\n\n"
 					+ "この度は、福岡書店をご利用いただき誠にありがとうございます。\n\n"
 					+ "<注文内容>\n"
 					+ selectBooks
 					+ "-------------------------------------------------------------\n"
-					+ "                                              合計金額 "+totalPrice+"円\n\n"
+					+ "                                             合計金額 " + totalPrice + "円\n\n"
+					+ "支払方法"
 					+ "発送予定日は " + shippingDateStr + " です。\n"
 					+ "添付ファイルにて請求書を送付しておりますのでご確認ください。\n";
 			textPart.setText(mailText, charset);
@@ -131,6 +132,7 @@ public class Mail {
 			//セッションからの情報
 			String recipientEmail = recipientInf.getEmail();
 			String recipientName = recipientInf.getName();
+			String userName = orderInf.getName();
 			StringBuilder selectBooks = new StringBuilder();//メールテキスト用意
 			for (JavaBeans.Book book : bookList) {
 			    int cartCnt = book.getCartCnt();
@@ -161,14 +163,27 @@ public class Mail {
 
 			//テキストセット
 			MimeBodyPart text = new MimeBodyPart();
-			String mailText = "注文完了のお知らせ\n"
-					+ recipientInf.getName()+"\n\n"
+			String mailText = "【福岡書店】"+userName+"様よりお届け物のお手配完了のお知らせ\n"
+					+recipientName +"様\n\n"
+					+"いつもご利用いただきありがとうございます。\n"
+					+"【福岡書店】カスタマーサポートです。\n\n"
+					+"本日、"+userName+"様より"+recipientName+"様へのお届け物として、\n"
+					+"以下の商品の発送手続きが完了いたしましたのでご連絡差し上げました。\n\n"
+					+"お受け取りのほど、よろしくお願い申し上げます。\n\n"
 					+ "この度は、福岡書店をご利用いただき誠にありがとうございます。\n\n"
-					+ "<注文内容>\n"
+					+userName+"様より商品の"
+					+ "<お届け内容>\n"
 					+ selectBooks
 					+ "-------------------------------------------------------------\n"
 					+ "発送予定日は " + shippingDateStr + " です。\n"
-					+ "添付ファイルにて請求書を送付しておりますのでご確認ください。\n";
+					+ "添付ファイルにて送り状を送付しておりますのでご確認ください。\n\n"
+					+"ご不明な点がございましたら、本メールの返信または下記お問い合せ窓口よりご連絡ください。\n"
+					+"商品がお手元に届くまで、今しばらくお待ちくださいませ。\n\n"
+					+"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+					+"ショップ名：福岡書店 千早支店\n"
+					+"お問い合わせ：support@example.com\n"
+					+"URL：https://example.com"
+					+"━━━━━━━━━━━━━━━━━━━━━━━━━━";
 			text.setText(mailText, charset);
 			multipart.addBodyPart(text);
 
