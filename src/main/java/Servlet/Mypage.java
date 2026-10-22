@@ -28,7 +28,7 @@ public class Mypage extends HttpServlet {
 		}
 		case "confirmMypage" -> {
 			forwardPath = "mypage_edit";
-			//				if(基本情報に変更があったら) {
+			//		if(基本情報に変更があったら) {
 			//					String newAccountName = request.getParameter("accountName");
 			//					 updateMyPage(int id,int userId,String accountName,String address,String email,String password)
 			//				}
@@ -154,7 +154,10 @@ public class Mypage extends HttpServlet {
 			//新カード情報取得
 			JavaBeans.Card newCardInf = new JavaBeans.Card();
 			newCardInf.setNumber(request.getParameter("newNumber"));
-			newCardInf.setExpiry(request.getParameter("newExpiry"));
+			newCardInf.setExpiryYear(request.getParameter("newExpiryYear"));
+			newCardInf.setExpiryMonth(request.getParameter("newExpiryMonth"));
+			String expiryStr=newCardInf.getExpiryYear()+"/"+newCardInf.getExpiryMonth();
+			newCardInf.setExpiry(expiryStr);
 			newCardInf.setHolder(request.getParameter("newHolder"));
 			Boolean newIsMain=Boolean.valueOf(request.getParameter("newIsMain"));
 			newCardInf.setIsMain(newIsMain);

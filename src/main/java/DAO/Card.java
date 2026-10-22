@@ -31,7 +31,10 @@ public class Card {
 						card.setId(rs.getInt("id"));
 						card.setCardId(rs.getInt("card_id"));
 						card.setNumber(rs.getString("number"));
-						card.setExpiry(rs.getString("expiry"));
+						card.setExpiryYear(rs.getString("expiry_year"));
+						card.setExpiryMonth(rs.getString("expiry_month"));
+						String expiryStr=rs.getString("expiry_year")+"/"+rs.getString("expiry_month");
+						card.setExpiry(expiryStr);
 						card.setHolder(rs.getString("holder"));
 						card.setIsMain(rs.getBoolean("is_main"));
 						list.add(card);
@@ -57,14 +60,15 @@ public class Card {
 				}
 				PreparedStatement ps=db.prepareStatement(
 						"UPDATE usr_cards SET card_id=?,number=?,"
-						+ "expiry=?,holder=?,is_main=?"
+						+ "expiry_year=?,expiry_month=?,holder=?,is_main=?"
 						+ " WHERE id = ?;");
 	            ps.setInt(1,cardInf.getCardId());
 	            ps.setString(2,cardInf.getNumber());
-	            ps.setString(3,cardInf.getExpiry());
-	            ps.setString(4,cardInf.getHolder());
-	            ps.setBoolean(5,cardInf.getIsMain());
-	            ps.setInt(6,id);
+	            ps.setString(3,cardInf.getExpiryYear());
+	            ps.setString(4,cardInf.getExpiryMonth());
+	            ps.setString(5,cardInf.getHolder());
+	            ps.setBoolean(6,cardInf.getIsMain());
+	            ps.setInt(7,id);
 	            ps.executeUpdate();
 			}//catch略
 		}catch(NamingException | SQLException e){
@@ -86,10 +90,11 @@ public class Card {
 							psIsMain.executeUpdate();
 				}
 				PreparedStatement ps=db.prepareStatement(
-						"INSERT INTO usr_cards (id, number, expiry, holder, is_main) "
+						"INSERT INTO usr_cards (id, number, expiry_year,expiry_month, holder, is_main) "
 						+ "VALUES (?, ?, ?, ?, ?);");
 	            ps.setString(1,cardInf.getNumber());
-	            ps.setString(2,cardInf.getExpiry());
+	            ps.setString(2,cardInf.getExpiryYear());
+	            ps.setString(2,cardInf.getExpiryMonth());
 	            ps.setString(3,cardInf.getHolder());
 	            ps.setBoolean(4,cardInf.getIsMain());
 	            ps.setInt(5,id);

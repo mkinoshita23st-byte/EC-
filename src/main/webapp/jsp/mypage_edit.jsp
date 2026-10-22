@@ -107,17 +107,6 @@
 										value="${address.getPostalCode()}">
 									<div class="form-text text-muted" style="font-size: 0.75rem;">ハイフンなしで7桁の数値で入力してください</div>
 								</div>
-								<div class="col-md-6 d-flex align-items-center pt-3">
-									<div class="form-check mb-0">
-										<!-- cancel-radioクラスを追加 -->
-										<input class="form-check-input cancel-radio" type="radio"
-											id="mainAddress_${status.index}" name="mainAddressIndex"
-											value="${status.index}"
-											<c:if test="${address.getIsMain()}">checked</c:if>> <label
-											class="form-check-label fw-bold small text-primary"
-											for="mainAddress_${status.index}"> この住所をメインにする </label>
-									</div>
-								</div>
 							</div>
 							<div class="row g-2">
 								<div class="col-12">
@@ -129,7 +118,6 @@
 							</div>
 						</div>
 					</c:forEach>
-
 				</div>
 			</div>
 

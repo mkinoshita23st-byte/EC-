@@ -99,48 +99,58 @@
 					<div class="card p-3 bg-white border d-none" id="newAddressArea">
 						<h5 class="fw-bold mb-3 text-secondary">新しいお届け先の入力</h5>
 						<div class="row g-3">
-							<div class="col-md-6">
-								<label class="form-label small fw-bold">受取人氏名</label> <input
-									type="text" name="newRecipientName" class="form-control"
-									placeholder="例：山田 太郎" value="${newAddressInf.name}">
+							<div class="col-md-4">
+								<label class="form-label small fw-bold">氏</label> <input
+									type="text" name="newRecipientLastName" class="form-control"
+									placeholder="例：山田">
 							</div>
-							<div class="col-md-6">
-								<label class="form-label small fw-bold">郵便番号</label> <input
-									type="text" name="newPostalCode" class="form-control"
-									placeholder="例：000-0000"
-									value="〒${newAddressInf.getPostalCode().substring(0, 3)}-${newAddressInf.getPostalCode().substring(3)}">
+							<div class="col-md-4">
+								<label class="form-label small fw-bold">名</label> <input
+									type="text" name="newRecipientFirstName" class="form-control"
+									placeholder="例：太郎">
+							</div>
+							<div class="col-12">
+								<div class="col-md-3">
+									<label class="form-label small fw-bold">ミドルネームの有無</label> <select
+										id="middleNameSelect" name="middleNameOption"
+										class="form-select">
+										<option value="none">ミドルネーム無</option>
+										<option value="exists">ミドルネームがある</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6 d-none" id="middleNameField">
+								<label class="form-label small fw-bold">ミドルネーム</label> <input
+									type="text" name="newRecipientMiddleName" class="form-control"
+									placeholder="例：ディエゴ・ホセ・フランシスコ ">
+								<div class="form-text small">ミドルネームが複数ある場合は間に「・」を入れてください</div>
+							</div>
+							<div class="col-12">
+								<div class="col-md-3">
+									<label class="form-label small fw-bold">郵便番号</label> <input
+										type="text" name="newPostalCode" class="form-control"
+										placeholder="例：1234567" maxlength="7" pattern="\d{7}"
+										inputmode="numeric"
+										oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+									<div class="form-text small">ハイフンなし半角数字7桁</div>
+								</div>
 							</div>
 							<div class="col-12">
 								<label class="form-label small fw-bold">住所</label> <input
 									type="text" name="newAddress" class="form-control"
-									placeholder="例：東京都千代田区..." value="${newAddressInf.address}">
+									placeholder="例：東京都千代田区...">
 							</div>
 							<div class="col-12">
 								<label class="form-label small fw-bold">メールアドレス</label> <input
 									type="text" name="newEmail" class="form-control"
-									placeholder="例：example@domain.com"
-									value="${newAddressInf.email}">
-							</div>
-							<div class="col-12">
-								<label class="form-label small fw-bold d-block">メインの住所に設定しますか？</label>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio"
-										name="isMainAddress" id="addressMainYes" value="true">
-									<label class="form-check-label" for="addressMainYes">はい</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio"
-										name="isMainAddress" id="addressMainNo" value="false" checked>
-									<label class="form-check-label" for="addressMainNo">いいえ</label>
-								</div>
-							</div>
-							<div class="col-12 text-end mt-3">
-								<button type="submit" name="action" value="addNewAddress"
-									class="btn btn-success px-4">このお届け先を登録する</button>
+									placeholder="例：example@domain.com">
 							</div>
 						</div>
+						<div class="col-12 text-end mt-3">
+							<button type="submit" id="addNewAddress" name="action"
+								value="addNewAddress" class="btn btn-success px-4">このお届け先を登録する</button>
+						</div>
 					</div>
-
 				</div>
 			</div>
 
@@ -182,47 +192,70 @@
 					<div class="card p-3 bg-white border d-none" id="newCardArea">
 						<h5 class="fw-bold mb-3 text-secondary">新しいクレジットカードの入力</h5>
 						<div class="row g-3">
-							<div class="col-md-6">
-								<label class="form-label small fw-bold">カード番号</label> <input
-									type="text" name="newCardNumber" class="form-control"
-									placeholder="例：4111222233334444" value="${newCardInf.number}">
-							</div>
-							<div class="col-md-6">
-								<label class="form-label small fw-bold">名義人（ローマ字）</label> <input
-									type="text" name="newCardHolder" class="form-control"
-									placeholder="例：TARO YAMADA" value="${newCardInf.holder}">
-							</div>
-							<div class="col-md-6">
-								<label class="form-label small fw-bold">有効期限 (月/年)</label> <input
-									type="text" name="newCardExpiry" class="form-control"
-									placeholder="例：12/26" value="${newCardInf.expiry}">
-							</div>
-							<div class="col-12">
-								<label class="form-label small fw-bold d-block">メインのカードに設定しますか？</label>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainCard"
-										id="cardMainYes" value="true"> <label
-										class="form-check-label" for="cardMainYes">はい</label>
+							<div class="col-md-8">
+								<label class="form-label small fw-bold">カード番号</label>
+								<div class="input-group">
+									<input type="text" id="card1"
+										class="form-control text-center card-no-input" maxlength="4"
+										inputmode="numeric"> <span>-</span> <input type="text"
+										id="card2" class="form-control text-center card-no-input"
+										maxlength="4" inputmode="numeric"> <span
+										class="input-group-text">-</span> <input type="text"
+										id="card3" class="form-control text-center card-no-input"
+										maxlength="4" inputmode="numeric"> <span
+										class="input-group-text">-</span> <input type="text"
+										id="card4" class="form-control text-center card-no-input"
+										maxlength="4" inputmode="numeric">
 								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="isMainCard"
-										id="cardMainNo" value="false" checked> <label
-										class="form-check-label" for="cardMainNo">いいえ</label>
+								<input type="hidden" name="newCardNumber" id="newCardNumber">
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-4">
+									<label class="form-label small fw-bold">名義人（ローマ字）</label> <input
+										type="text" name="newCardHolder" class="form-control"
+										placeholder="例：TARO YAMADA">
 								</div>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label small fw-bold">有効期限 (月 / 年)</label>
+								<div class="input-group">
+									<input type="text" name="newCardMonth" id="cardMonth"
+										class="form-control text-center card-expiry-input"
+										maxlength="2" inputmode="numeric"> <span
+										class="input-group-text">/</span> <input type="text"
+										name="newCardYear" id="cardYear"
+										class="form-control text-center card-expiry-input"
+										maxlength="2" inputmode="numeric">
+								</div>
+								<div class="form-text small" id="expiryExample">例：01/28</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<label class="form-label small fw-bold d-block">メインのカードに設定しますか？</label>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="isMainCard"
+									id="cardMainYes" value="true"> <label
+									class="form-check-label" for="cardMainYes">はい</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="isMainCard"
+									id="cardMainNo" value="false" checked> <label
+									class="form-check-label" for="cardMainNo">いいえ</label>
 							</div>
 							<div class="col-12 text-end mt-3">
-								<button type="submit" name="action" value="addNewCard"
-									class="btn btn-success px-4">このカードを登録する</button>
+								<button type="submit" id="addNewCard" name="action"
+									value="addNewCard" class="btn btn-success px-4">このカードを登録する</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="d-flex justify-content-between mt-5">
-				<a href="MainServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
-				<a href="MainServlet?action=mypage_edit" class="btn btn-secondary">会員情報を編集</a>
-			</div>
-		</form>
+	</div>
+	<div class="d-flex justify-content-between mt-5">
+		<a href="MainServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
+		<a href="MainServlet?action=mypage_edit" class="btn btn-secondary">会員情報を編集</a>
+	</div>
+	</form>
 	</div>
 	<script>
 		const toggleAddressBtn = document.getElementById('toggleNewAddressBtn');
@@ -247,6 +280,92 @@
 				newCardArea.classList.add('d-none');
 				toggleCardBtn.textContent = '+ 新しいカードを追加';
 			}
+		});
+
+		const middleNameSelect = document.getElementById('middleNameSelect');
+		const middleNameField = document.getElementById('middleNameField');
+		middleNameSelect.addEventListener('change', function() {
+			if (this.value === 'exists') {
+				middleNameField.classList.remove('d-none');
+			} else {
+				middleNameField.classList.add('d-none');
+				middleNameField.querySelector('input').value = '';
+			}
+		});
+
+		const mypageForm = document.querySelector('form[action="MypageServlet"]');
+		if (mypageForm) {
+			mypageForm.addEventListener('submit',function(event) {
+				const activeBtn = document.activeElement;
+				if (activeBtn && activeBtn.value === 'addNewAddress') {
+					const lastName = document
+							.querySelector('input[name="newRecipientLastName"]').value.trim();
+					const firstName = document
+							.querySelector('input[name="newRecipientFirstName"]').value.trim();
+					const postalCode = document
+							.querySelector('input[name="newPostalCode"]').value.trim();
+					const address = document
+							.querySelector('input[name="newAddress"]').value.trim();
+					const email = document
+							.querySelector('input[name="newEmail"]').value.trim();
+					if (!lastName || !firstName || !postalCode
+							|| !address || !email) {
+						alert('新しいお届け先の必須項目（氏、名、郵便番号、住所、メールアドレス）'
+								+'をすべて入力してください。');
+						event.preventDefault();
+						return false;
+					}
+					const middleNameSelectElem = document
+							.getElementById('middleNameSelect');
+					if (middleNameSelectElem && middleNameSelectElem.value === 'exists') {
+						const middleName = document
+								.querySelector('input[name="newRecipientMiddleName"]').value.trim();
+						if (!middleName) {
+							alert('ミドルネームがある場合は入力してください。');
+							event.preventDefault();
+							return false;
+						}
+					}
+				}
+				if (activeBtn && activeBtn.value === 'addNewCard') {
+					const cardNumber = document.querySelector('input[name="card1"]').value.trim()
+							+document
+							.querySelector('input[name="card2"]').value.trim()+document
+							.querySelector('input[name="card3"]').value.trim()+document
+							.querySelector('input[name="card4"]').value.trim();
+					const cardHolder = document
+							.querySelector('input[name="newCardHolder"]').value.trim();
+					const cardExpiry年 = document
+							.querySelector('input[name="]').value.trim();
+					const cardExpiry月 = document
+					const cardExpiry='20'+cardExpiry年+'-'+(cardExpiry月+1）+'-1';
+					const now =new Date();年月日
+					if (!cardNumber || !cardHolder|| !cardExpiry) {
+						alert('新しいクレジットカードの必須項目（カード番号、名義人、有効期限、メインカードか）'
+								+'をすべて入力してください。');
+						event.preventDefault();
+						return false;
+					}eles{
+						if(cardNumberが16桁でない場合){
+							alert('番号足りんで。');
+							event.preventDefault();
+							return false;
+						}
+						if(cardExpiry<=now){
+						alert('期限が切れています。有効期限内のカード情報を入力してください。');
+						event.preventDefault();
+						return false;
+						}
+					}
+				}
+			});
+		}
+		
+		window.addEventListener('DOMContentLoaded', function() {
+			const currentYearFull = new Date().getFullYear();
+			const targetYearShort = (currentYearFull + 2 - 2000).toString().padStart(2, '0');
+			const expiryExample = document.getElementById('expiryExample');
+			expiryExample.textContent = '例：01/' + targetYearShort;
 		});
 	</script>
 </body>

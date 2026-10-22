@@ -6,6 +6,8 @@ public class Card implements Serializable{
 	private int id;
 	private int cardId;
 	private String number;
+	private String expiryYear;
+	private String expiryMonth;
 	private String expiry;
 	private String holder;
 	private boolean isMain;
@@ -29,6 +31,18 @@ public class Card implements Serializable{
 	}
 	public void setNumber(String number) {
 		this.number = number;
+	}
+	public String getExpiryYear() {
+		return expiryYear;
+	}
+	public void setExpiryYear(String expiryYear) {
+		this.expiryYear = expiryYear;
+	}
+	public String getExpiryMonth() {
+		return expiryMonth;
+	}
+	public void setExpiryMonth(String expiryMonth) {
+		this.expiryMonth = expiryMonth;
 	}
 	public String getExpiry() {
 		return expiry;
