@@ -39,7 +39,7 @@ public class Login extends HttpServlet {
 						}
 						//必要なリスト大量作成
 						JavaBeans.User userInf = result.getUserInf();
-						String userId = String.valueOf((userInf).getId());
+						int userId = userInf.getId();
 						DAO.Address addressDao = new DAO.Address();
 						List<JavaBeans.Address> addressList = addressDao.getAddressData(userId);
 						DAO.Card cardDao = new DAO.Card();

@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 public class Cart {
 	// ユーザーIDに紐づくカート情報一覧の取得
-	public List<JavaBeans.Cart> getCartData(String id) {
+	public List<JavaBeans.Cart> getCartData(int id) {
 		List<JavaBeans.Cart> list = new ArrayList<>();
 		try {
 			Context context = new InitialContext();
@@ -22,7 +22,7 @@ public class Cart {
 			try (Connection db = ds.getConnection()) {
 				PreparedStatement ps = db.prepareStatement(
 						"SELECT * FROM usr_cart WHERE id = ?;");
-				ps.setString(1, id);
+				ps.setInt(1, id);
 				try (ResultSet rs = ps.executeQuery()) {
 					while (rs.next()) {
 						JavaBeans.Cart cart = new JavaBeans.Cart();

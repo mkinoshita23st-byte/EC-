@@ -11,7 +11,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class Order {
-	public JavaBeans.Order getOrderData(String id){
+	public JavaBeans.Order getOrderData(int id){
 		JavaBeans.Order orderInf=null;
 		try {
 			Context context=new InitialContext();
@@ -20,7 +20,7 @@ public class Order {
 				try (Connection db=ds.getConnection()){
 					PreparedStatement ps=db.prepareStatement(
 							"SELECT * FROM usr_mypage WHERE id = ?;");
-					ps.setString(1,id);
+					ps.setInt(1,id);
 					try (ResultSet rs = ps.executeQuery()) {
 	                    if (rs.next()) {
 							orderInf=new JavaBeans.Order();

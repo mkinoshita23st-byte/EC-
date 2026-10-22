@@ -27,16 +27,23 @@
 </head>
 <body class="bg-light">
 	<div class="container my-5" style="max-width: 900px;">
+		<c:choose>
+			<c:when test="${orderInf.isLogin}">
+				<a href="MainServlet?action=mypage_view">ログイン中：${orderInf.name}</a>
+				<br>
+				<a href="MainServlet?action=logout">ログアウト</a>
+			</c:when>
+			<c:otherwise>
+				<a href="MainServlet?action=login">未ログイン：あなた</a>
+			</c:otherwise>
+		</c:choose>
 		<h2 class="mb-4 text-center">マイページ</h2>
 		<form method="POST" action="MypageServlet">
-
 			<div class="card mb-4 shadow-sm">
 				<div class="card-body">
 					<div
 						class="d-flex justify-content-between align-items-center section-header">
 						<h4 class="card-title text-primary mb-0">基本会員情報</h4>
-						<a href="MainServlet?action=mypage_edit"
-							class="btn btn-sm btn-outline-primary">+ 基本会員情報を編集</a>
 					</div>
 					<div class="row mb-2">
 						<div class="col-sm-3 fw-bold">ユーザーID</div>
@@ -68,31 +75,25 @@
 						<button type="button" id="toggleNewAddressBtn"
 							class="btn btn-sm btn-outline-primary">+ 新しいお届け先を追加</button>
 					</div>
-					<div class="table-responsive mb-4">
-						<table class="table table-hover align-middle">
-							<thead class="table-light">
-								<tr>
-									<th>宛名</th>
-									<th>郵便番号</th>
-									<th>住所</th>
-									<th>メールアドレス</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="address" items="${addressList}">
-									<tr>
-										<td>${address.getName()}</td>
-										<td>〒${address.getPostalCode().substring(0, 3)}-${address.getPostalCode().substring(3)}</td>
-										<td>${address.getAddress()}</td>
-										<td>${address.getEmail()}</td>
-										<td><c:if test="${address.getIsMain()}">
-												<span class="badge badge-main">メイン住所</span>
-											</c:if></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
+					<div class="mb-4">
+						<c:forEach var="addr" items="${addressList}">
+							<div class="row mb-2">
+								<div class="col-sm-3 fw-bold">宛名</div>
+								<div class="col-sm-9">${addr.getName()}</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-sm-3 fw-bold">メールアドレス</div>
+								<div class="col-sm-9">${addr.getEmail()}</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-sm-3 fw-bold">住所</div>
+								<div class="col-sm-9">
+									〒${addr.getPostalCode().substring(0, 3)}-${addr.getPostalCode().substring(3)}<br>
+									${addr.getAddress()}
+								</div>
+							</div>
+							<hr>
+						</c:forEach>
 					</div>
 
 					<div class="card p-3 bg-white border d-none" id="newAddressArea">
@@ -106,7 +107,8 @@
 							<div class="col-md-6">
 								<label class="form-label small fw-bold">郵便番号</label> <input
 									type="text" name="newPostalCode" class="form-control"
-									placeholder="例：000-0000" value="〒${newAddressInf.getPostalCode().substring(0, 3)}-${newAddressInf.getPostalCode().substring(3)}">
+									placeholder="例：000-0000"
+									value="〒${newAddressInf.getPostalCode().substring(0, 3)}-${newAddressInf.getPostalCode().substring(3)}">
 							</div>
 							<div class="col-12">
 								<label class="form-label small fw-bold">住所</label> <input
@@ -214,8 +216,11 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
+			</div>
+			<div class="d-flex justify-content-between mt-5">
+				<a href="MainServlet?action=book_list" class="btn btn-secondary">書籍一覧へ</a>
+				<a href="MainServlet?action=mypage_edit" class="btn btn-secondary">会員情報を編集</a>
 			</div>
 		</form>
 	</div>

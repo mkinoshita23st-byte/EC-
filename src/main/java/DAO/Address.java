@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 public class Address {
 	//宛先情報取得
-	public List<JavaBeans.Address> getAddressData(String id) {
+	public List<JavaBeans.Address> getAddressData(int id) {
 		List<JavaBeans.Address> list = new ArrayList<>();
 		try {
 			Context context = new InitialContext();
@@ -23,7 +23,7 @@ public class Address {
 			try (Connection db = ds.getConnection()) {
 				PreparedStatement ps = db.prepareStatement(
 						"SELECT * FROM usr_addresses WHERE id = ? AND is_main = 0");
-				ps.setString(1, id);
+				ps.setInt(1, id);
 				try (ResultSet rs = ps.executeQuery()) {
 					while (rs.next()) {
 						JavaBeans.Address address = new JavaBeans.Address();
